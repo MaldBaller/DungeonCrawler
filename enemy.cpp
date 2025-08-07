@@ -2,7 +2,7 @@
 
 class enemy : public character {
 public:
-    enemy( // Constructor
+    enemy(          // Constructor
         int str,
         int sta,
         int itl,
@@ -19,12 +19,13 @@ public:
     )
     : character(str, sta, itl, dex, team, lvl, weg, nam, pos, hit, tex, rot, scl)
     {
-        void Draw() {
-            DrawTexture(texture, position.x, position.y, WHITE);
-        }
+        
+    }
+    void Draw() {
+        DrawTexture(texture, position.x, position.y, WHITE);
+    }
 
-        void Move(deltaX, deltaY) {
-            setPosition({position.x + deltaX, position.y + deltaY});
-        }
+    void Move(deltaX, deltaY) {
+        setPosition({position.x + deltaX, position.y + deltaY});
     }
 };
