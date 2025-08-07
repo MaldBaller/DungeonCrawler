@@ -2,8 +2,7 @@
 
 class enemy : public character {
 public:
-    // Constructor
-    enemy(
+    enemy( // Constructor
         int str,
         int sta,
         int itl,
@@ -25,7 +24,7 @@ public:
         }
 
         void Move(deltaX, deltaY) {
-            setPosition({position.x - deltaX, position.y - deltaY});
+            setPosition({position.x + deltaX, position.y + deltaY});
         }
     }
 };
