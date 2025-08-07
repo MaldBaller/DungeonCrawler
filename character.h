@@ -13,8 +13,8 @@ public:
     std::string name;
     Vector2 position;
     Rectangle hitbox;
-    float rotation;
-    float scale;
+    float rotation = 0.f; //0 is facing down , 1 is left 2 is up 3 is right
+    float scale = 1.f;
     int team; // 0 for player, 1 for enemy, 2 for neutral
     int level; // Level of the character
 
@@ -22,31 +22,26 @@ public:
         Defult value is 0, every level is +1 x 3 times (ex. damage = weapon damage * strength)
         Different stats scale diffenly respect to real stats
     */
-    int strength;
-    int stamina;
-    int intelligence;
-    int dexterity;
+    int strength = 0;
+    int stamina = 0;
+    int intelligence = 0;
+    int dexterity = 0;
+
+
     int weight;
     
 
     //character() = default;
 
     // Constructor
-    Character(int str, int sta, int itl, int dex, int team, int lvl, int weg, std::string nam , Vector2 pos = {0, 0}, Rectangle hit = {0, 0, 0, 0}, float rot = 0.0f, float scl = 1.0f)
+    Character( int team, int lvl, std::string nam , Vector2 pos = {0, 0}, Rectangle hit = {0,0,0,0})
     {
         //level = (str + sta + itl + dex - 4) * 4; // Calculate level based on attributes
         position = pos;
         hitbox = hit;
-        rotation = rot;
-        scale = scl;
         name = nam;
 
-        strength = str;
-        stamina = sta;
-        intelligence = itl;
-        dexterity = dex;
-
-        weight = weg;
+        //weight = weg;
 
         level = lvl;
 
@@ -61,11 +56,18 @@ public:
 
     }
 
+    void SetStats(int str, int sta, int itl, int dex){
+        strength = str;
+        stamina = sta;
+        intelligence = itl;
+        dexterity = dex;
+    }
+
     void SetPosition(Vector2 pos){
         position = pos;
     }
 
     void Draw(){
-
+        
     }
 };

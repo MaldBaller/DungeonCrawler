@@ -15,18 +15,25 @@ int main()
 
     int screenX = GetScreenWidth();
     int screenY = GetScreenHeight();
+    bool fullScreen = true;
 
 
+    int gamemode = 0; // 0 = main menu , 1 = dungeon , 2 = shop in beteween 
     std::string buffer;
-    Character player(5, 5, 5, 5, 0, 1, 10, "Hero", {screenX / 2.f, screenY / 2.f}, {0, 0, 50, 50}, 0.0f, 1.0f);
+    
+    
+    Character player(0, 0, "Hero", {0,0}, {0, 0, 50, 50});
     Texture playerTextures[100];
-    for (int i = 0; i < 0; i++){
+    for (int i = 0; i < 1; i++){
         buffer = "images/player_" + std::to_string(i) + ".png";
         playerTextures[i] = LoadTexture(buffer.c_str());
     }
 
 
-    std::vector <Character> Enemies;
+    std::vector <Character> enemies;
+
+    enemies.push_back(Character(1,10,"Goblin", {250,0}, {0, 0, 50, 50}));
+    
 
     //character Enemies(3, 3, 3, 3, 1, 1, 5, "Goblin", {screenX / 2.f + 100, screenY / 2.f}, {0, 0, 50, 50}, LoadTexture("resources/enemy.png"), 0.0f, 1.0f);
 
@@ -36,10 +43,31 @@ int main()
 
     while (!WindowShouldClose())
     {
-        
+        //Input
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
             
+        }
+
+        if (IsKeyPressed(KEY_F11)){
+            ToggleFullscreen();
+        }
+
+        //Game input
+        if (gamemode == 1) {
+            if (IsKeyDown(KEY_W)){
+                player.position.y += player.speed;
+                player.rotation = 2;
+            }if (IsKeyDown(KEY_S)){
+                player.position.y += player.speed;
+                player.rotation = 2;
+            }if (IsKeyDown(KEY_A)){
+                player.position.y += player.speed;
+                player.rotation = 2;
+            }if (IsKeyDown(KEY_D)){
+                player.position.y += player.speed;
+                player.rotation = 2;
+            }
         }
 
 
@@ -47,7 +75,7 @@ int main()
         BeginDrawing();
         ClearBackground(BLACK);
 
-        for (int i = 0; i < Enemies.size(); i++){
+        for (int i = 0; i < 0; i++){
             
         }
 

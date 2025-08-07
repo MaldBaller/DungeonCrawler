@@ -16,10 +16,10 @@ private:
     
 public:
      
-    Player(int str, int sta, int itl, int dex, int team, int lvl, int weg, std::string nam , Vector2 pos, Rectangle hit = {0, 0, 0, 0}, float rot = 0.0f, float scl = 1.0f, int exper) 
-     : Character(str, sta, itl, dex, team, lvl, weg, nam, pos, hit, rot, scl)
+    Player(int team, int lvl, std::string nam , Vector2 pos, Rectangle hit) 
+     : Character(team, lvl, nam, pos, hit)
     {
-        experience = exper;
+        experience = 0;
     }
 
 };
