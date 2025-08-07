@@ -21,11 +21,12 @@ public:
     {
 
     }
+    
     void Draw() {
         DrawTexture(texture, position.x, position.y, WHITE);
     }
 
-    void Move(float deltaX, float deltaY) {
+    void Move(int deltaX, int deltaY) {
         setPosition({position.x + deltaX, position.y + deltaY});
     }
 };
