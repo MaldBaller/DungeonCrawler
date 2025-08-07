@@ -1,10 +1,15 @@
 #include "raylib.h"
+#include <string>
 
 class character {
 public:
     // Basic attributes
     int health;
+    int maxHealth;
+    int mana;
+    int maxMana;
     float speed;
+    std::string name;
     Vector2 position;
     Rectangle hitbox;
     Texture2D texture;
@@ -14,17 +19,50 @@ public:
     int level; // Level of the character
 
     /* Attributes
-        Defult value is 0, every level is +0.05 x 3 times (ex. damage = weapon damage * strength)
+        Defult value is 0, every level is +1 x 3 times (ex. damage = weapon damage * strength)
         Different stats scale diffenly respect to real stats
     */
-    float strength;
-    float stamina;
-    float intelligence;
-    float dexterity;
+    int strength;
+    int stamina;
+    int intelligence;
+    int dexterity;
+    int weight;
     
+
+    //character() = default;
+
     // Constructor
-    character(float strength, float stamina, float intelligence, float dexterity, int team)
+    character(int str, int sta, int itl, int dex, int team, int lvl, int weg, std::string nam , Vector2 pos = {0, 0}, Rectangle hit = {0, 0, 0, 0}, Texture2D tex = {}, float rot = 0.0f, float scl = 1.0f)
     {
-        int level = (strength + stamina + intelligence + dexterity - 4) * ;
+        //level = (str + sta + itl + dex - 4) * 4; // Calculate level based on attributes
+        position = pos;
+        hitbox = hit;
+        texture = tex;
+        rotation = rot;
+        scale = scl;
+        name = nam;
+
+        strength = str;
+        stamina = sta;
+        intelligence = itl;
+        dexterity = dex;
+
+        weight = weg;
+
+        level = lvl;
+
+        health = 20 + stamina * 2 + level * 1; // Base health + stamina contribution + level contribution
+        maxHealth = health;
+
+        mana = 10 + intelligence * 2 + level * 1; // Base mana + intelligence contribution + level contribution
+        maxMana = mana;
+
+        speed = 2.0f + (dexterity / 100.f) + (level / 500.f) - (weight / 3000.f); // Base speed + dexterity contribution + level contribution
+
+
+    }
+
+    void setPosition(Vector2 pos){
+        position = pos;
     }
 };
