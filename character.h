@@ -2,7 +2,7 @@
 #include "raylib.h"
 #include <string>
 
-class character {
+class Character {
 public:
     // Basic attributes
     int health;
@@ -32,7 +32,7 @@ public:
     //character() = default;
 
     // Constructor
-    character(int str, int sta, int itl, int dex, int team, int lvl, int weg, std::string nam , Vector2 pos = {0, 0}, Rectangle hit = {0, 0, 0, 0}, float rot = 0.0f, float scl = 1.0f)
+    Character(int str, int sta, int itl, int dex, int team, int lvl, int weg, std::string nam , Vector2 pos = {0, 0}, Rectangle hit = {0, 0, 0, 0}, float rot = 0.0f, float scl = 1.0f)
     {
         //level = (str + sta + itl + dex - 4) * 4; // Calculate level based on attributes
         position = pos;

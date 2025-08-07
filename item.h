@@ -1,7 +1,7 @@
 #pragma once
 #include "character.h"
 
-class item {
+class Item {
 
 public:
 
@@ -18,7 +18,7 @@ public:
     int level;
     int weight;
 
-    item(int id, int typ, bool canStore, std::string nam, Vector2 pos = {0, 0}, Rectangle hit = {0, 0, 0, 0}, Texture2D tex = {}, float rot = 0.0f, float scl = 1.0f, int lvl = 1, int weg = 1) {
+    Item(int id, int typ, bool canStore, std::string nam, Vector2 pos = {0, 0}, Rectangle hit = {0, 0, 0, 0}, Texture2D tex = {}, float rot = 0.0f, float scl = 1.0f, int lvl = 1, int weg = 1) {
         ID = id;
         type = typ;
         canBeStored = canStore;
