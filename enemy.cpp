@@ -19,13 +19,13 @@ public:
     )
     : character(str, sta, itl, dex, team, lvl, weg, nam, pos, hit, tex, rot, scl)
     {
-        
+
     }
     void Draw() {
         DrawTexture(texture, position.x, position.y, WHITE);
     }
 
-    void Move(deltaX, deltaY) {
+    void Move(float deltaX, float deltaY) {
         setPosition({position.x + deltaX, position.y + deltaY});
     }
 };
