@@ -33,7 +33,7 @@ int main()
 
     while (!WindowShouldClose())
     {
-        //std::cout << screenX << "<screen width :)";
+        //std::cout << screenX << "<screen width";
 
         if (IsKeyPressed(KEY_F11)) {
             ToggleFullscreen();
@@ -51,7 +51,9 @@ int main()
             player.hitbox.x = player.position.x;
             player.hitbox.y = player.position.y;
             if (weapon == 0){
-                
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+                    
+                }
             }
 
         }

@@ -46,6 +46,8 @@ public:
             }
         }
         Move(moveToMake.x, moveToMake.y);
+
+        
     }
     // void FollowPlayer(Vector2 playerPosition) {
     //     float angleToPlayer = GetAngleBetweenPoints(position, playerPosition);
