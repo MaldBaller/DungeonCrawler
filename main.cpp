@@ -21,7 +21,7 @@ int main()
     std::vector <Enemy> enemy;
 
     for(int i = 0; i < 2; i++){
-        enemy.push_back(Enemy( {float(randint(-400,400)),float(randint(-400,400))}, {0,0,32*4,32*4}, LoadTexture("resources/enemy_0_0.png")));
+        enemy.push_back(Enemy( {float(randint(-400,400)),float(randint(-400,400))}, {0,0,32*4,32*4}, LoadTexture("resources/enemy_0_0.png"), 50.0));
     }
 
     int screenX = GetScreenWidth();
