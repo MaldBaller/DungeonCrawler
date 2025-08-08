@@ -8,10 +8,15 @@ float FindDistance(Vector2 position1, Vector2 position2) {
     return sqrt(pow(position1.x - position2.x, 2) + pow(position1.y - position2.y, 2));
 }
 
-class enemy : public Character {
+class Enemy : public Character {
 public:
+<<<<<<< HEAD
     enemy(Vector2 pos, Rectangle hit, Texture2D texture)
     : Character(pos, hit, texture)
+=======
+    Enemy(Vector2 pos, Rectangle hit, Texture2D tex)
+    : Character(pos, hit, tex)
+>>>>>>> Chris-features
     {
 
     }
@@ -19,7 +24,7 @@ public:
     // void Draw() {
     //     DrawTexture(texture, position.x, position.y, WHITE);
     // }
-
+    
     void Move(int deltaX, int deltaY) {
         SetPosition({position.x + deltaX, position.y + deltaY});
     }
