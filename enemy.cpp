@@ -34,5 +34,6 @@ public:
                 moveToMake = positionChanges[i];
             }
         }
+        Move(moveToMake.x, moveToMake.y);
     }
 };
