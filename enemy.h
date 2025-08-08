@@ -3,6 +3,14 @@
 #include <cmath>
 #include "raymath.h"
 
+
+float GetAngleBetweenPoints(Vector2 a, Vector2 b) {
+    float dx = b.x - a.x;
+    float dy = b.y - a.y;
+
+    return atan2f(dy, dx);  // Convert radians to degrees
+}
+
 float FindDistance(Vector2 position1, Vector2 position2) {
     // This is the Pythagorean Theorem
     return sqrt(pow(position1.x - position2.x, 2) + pow(position1.y - position2.y, 2));
@@ -10,13 +18,8 @@ float FindDistance(Vector2 position1, Vector2 position2) {
 
 class Enemy : public Character {
 public:
-<<<<<<< HEAD
-    enemy(Vector2 pos, Rectangle hit, Texture2D texture)
-    : Character(pos, hit, texture)
-=======
     Enemy(Vector2 pos, Rectangle hit, Texture2D tex)
     : Character(pos, hit, tex)
->>>>>>> Chris-features
     {
 
     }
@@ -41,5 +44,9 @@ public:
             }
         }
         Move(moveToMake.x, moveToMake.y);
+    }
+
+    void Draw(Vector2 playerPos) {
+        DrawTextureEx(playerImage, {float(GetScreenWidth() / 2.f - 16 * 4) + (position.x - playerPos.x), float(GetScreenHeight() / 2.f - 16 * 4) + (position.y - playerPos.y)}, 0.f, 4.f, WHITE);
     }
 };

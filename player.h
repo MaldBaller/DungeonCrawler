@@ -17,7 +17,7 @@ public:
         gold = 0;
     }
 
-    void Draw() override {
+    void Draw() {
         DrawTextureEx(playerImage, {float(GetScreenWidth() / 2.f - 16 * 4), float(GetScreenHeight() / 2.f - 16 * 4)}, 0.f, 4.f, WHITE);
     }
 };
