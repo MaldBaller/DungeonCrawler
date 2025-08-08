@@ -33,17 +33,9 @@ public:
     }
 
     void FollowPlayer(Vector2 playerPosition) {
-        const int stepDistance = 1;
-        const Vector2 positionChanges[4] = {{0, stepDistance}, {0, -stepDistance}, {stepDistance, 0}, {-stepDistance, 0}};
-
-        Vector2 moveToMake = {0, 0};
-        for(int i; i < 4; i++) {
-            // iterates through possible moves to find the best one
-            if(FindDistance( Vector2Add(position, positionChanges[i]) , playerPosition) < FindDistance( Vector2Add(position, moveToMake) , playerPosition)){
-                moveToMake = positionChanges[i];
-            }
-        }
-        Move(moveToMake.x, moveToMake.y);
+        const float speed = 1.0;
+        float angleToPlayer = GetAngleBetweenPoints(position, playerPosition);
+        Move(cos(angleToPlayer) * speed, sin(angleToPlayer) * speed);
     }
 
     void Draw(Vector2 playerPos) {
