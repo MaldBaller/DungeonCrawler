@@ -26,7 +26,7 @@ public:
     void Slash(std::vector <Enemy> enemy) { // The list of enemies is in main, so the function needs to take it in
         for(int i; i < enemy.size(); i++) {
             if(enemy[i].position.x - position.x < 60 && enemy[i].position.y - position.y < 60) {
-                // TODO: damage enemy when health is implemented
+                enemy[i].health -= damage;
             }
         }
     }
