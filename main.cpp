@@ -17,6 +17,7 @@ int main()
     Texture2D playerImage = LoadTexture("resources/player_0.png"); 
 
     Player player({0, 0}, {0,0,32*4,32*4}, playerImage);
+    int weapon = 0; //0 is sword 1 is mage
     std::vector <Enemy> enemy;
 
     for(int i = 0; i < 2; i++){
@@ -49,8 +50,9 @@ int main()
             if (IsKeyDown(KEY_D)) player.position.x += player.speed;
             player.hitbox.x = player.position.x;
             player.hitbox.y = player.position.y;
-            
-
+            if (weapon == 0){
+                
+            }
 
         }
 
