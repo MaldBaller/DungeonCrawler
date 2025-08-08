@@ -1,3 +1,4 @@
+#pragma once
 #include "character.h"
 #include <cmath>
 #include "raymath.h"
@@ -9,8 +10,8 @@ float FindDistance(Vector2 position1, Vector2 position2) {
 
 class enemy : public Character {
 public:
-    enemy(int team, int lvl, std::string nam , Vector2 pos = {0, 0}, Rectangle hit = {0,0,0,0})
-    : Character(team, lvl, nam, pos, hit)
+    enemy(Vector2 pos, Rectangle hit, Texture2D texture)
+    : Character(pos, hit, texture)
     {
 
     }
