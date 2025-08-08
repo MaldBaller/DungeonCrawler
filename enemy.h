@@ -46,7 +46,6 @@ public:
         Move(moveToMake.x, moveToMake.y);
     }
     // void FollowPlayer(Vector2 playerPosition) {
-    //     const float speed = 1.0;
     //     float angleToPlayer = GetAngleBetweenPoints(position, playerPosition);
     //     Move(cos(angleToPlayer) * speed, sin(angleToPlayer) * speed);
     // }
