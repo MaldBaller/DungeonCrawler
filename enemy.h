@@ -1,3 +1,4 @@
+#pragma once
 #include "character.h"
 #include <cmath>
 #include "raymath.h"
@@ -7,10 +8,10 @@ float FindDistance(Vector2 position1, Vector2 position2) {
     return sqrt(pow(position1.x - position2.x, 2) + pow(position1.y - position2.y, 2));
 }
 
-class enemy : public Character {
+class Enemy : public Character {
 public:
-    enemy(int team, int lvl, std::string nam , Vector2 pos = {0, 0}, Rectangle hit = {0,0,0,0})
-    : Character(team, lvl, nam, pos, hit)
+    Enemy(Vector2 pos, Rectangle hit, Texture2D tex)
+    : Character(pos, hit, tex)
     {
 
     }
@@ -18,7 +19,7 @@ public:
     // void Draw() {
     //     DrawTexture(texture, position.x, position.y, WHITE);
     // }
-
+    
     void Move(int deltaX, int deltaY) {
         SetPosition({position.x + deltaX, position.y + deltaY});
     }
