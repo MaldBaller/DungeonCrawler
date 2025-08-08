@@ -16,10 +16,10 @@ int main()
 
     Texture2D playerImage = LoadTexture("resources/player_0.png"); 
 
-    Player player({0, 0}, {0, 0, 50, 50}, playerImage);
+    Player player({0, 0}, {0,0,32*4,32*4}, playerImage);
     std::vector <Enemy> enemy;
 
-    for(int i = 0; i < 200; i++){
+    for(int i = 0; i < 2; i++){
         enemy.push_back(Enemy( {float(randint(-400,400)),float(randint(-400,400))}, {0,0,32*4,32*4}, LoadTexture("resources/enemy_0_0.png")));
     }
 
@@ -47,6 +47,11 @@ int main()
             if (IsKeyDown(KEY_S)) player.position.y += player.speed;
             if (IsKeyDown(KEY_A)) player.position.x -= player.speed;
             if (IsKeyDown(KEY_D)) player.position.x += player.speed;
+            player.hitbox.x = player.position.x;
+            player.hitbox.y = player.position.y;
+            
+
+
         }
 
         BeginDrawing();
@@ -67,7 +72,7 @@ int main()
             }
 
             player.Draw();
-            //DrawRectangle();
+             DrawRectangleLines(float(GetScreenWidth() / 2.f - 16 * 4), float(GetScreenHeight() / 2.f - 16 * 4),player.hitbox.width,player.hitbox.height,RED);
 
             
         }

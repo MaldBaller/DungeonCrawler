@@ -30,6 +30,8 @@ public:
     
     void Move(int deltaX, int deltaY) {
         SetPosition({position.x + deltaX, position.y + deltaY});
+        hitbox.x = position.x;
+        hitbox.y = position.y;
     }
 
     void FollowPlayer(Vector2 playerPosition) {
@@ -48,5 +50,6 @@ public:
 
     void Draw(Vector2 playerPos) {
         DrawTextureEx(playerImage, {float(GetScreenWidth() / 2.f - 16 * 4) + (position.x - playerPos.x), float(GetScreenHeight() / 2.f - 16 * 4) + (position.y - playerPos.y)}, 0.f, 4.f, WHITE);
+        DrawRectangleLines(float(GetScreenWidth() / 2.f - 16 * 4) + (hitbox.x - playerPos.x), float(GetScreenHeight() / 2.f - 16 * 4) + (hitbox.y - playerPos.y),hitbox.width,hitbox.height,BLUE);
     }
 };
