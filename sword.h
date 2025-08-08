@@ -7,10 +7,10 @@
 class Sword {
 public:
     Texture2D swordImage;
-    int damage;
+    float damage;
     Vector2 position = {0, 0};
 
-    Sword(Texture2D texture, int dmg) {
+    Sword(Texture2D texture, float dmg) {
         swordImage = texture;
         damage = dmg;
     }
