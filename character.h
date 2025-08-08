@@ -22,8 +22,8 @@ public:
     void SetPosition(Vector2 pos){
         position = pos;
     }
-
+    /*
     virtual void Draw(){
         DrawTexture(playerImage, position.x, position.y, WHITE);
-    }
+    }*/
 };

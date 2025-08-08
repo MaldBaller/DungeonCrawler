@@ -3,15 +3,23 @@
 #include <cmath>
 #include "raymath.h"
 
+
+float GetAngleBetweenPoints(Vector2 a, Vector2 b) {
+    float dx = b.x - a.x;
+    float dy = b.y - a.y;
+
+    return atan2f(dy, dx);  // Convert radians to degrees
+}
+
 float FindDistance(Vector2 position1, Vector2 position2) {
     // This is the Pythagorean Theorem
     return sqrt(pow(position1.x - position2.x, 2) + pow(position1.y - position2.y, 2));
 }
 
-class enemy : public Character {
+class Enemy : public Character {
 public:
-    enemy(Vector2 pos, Rectangle hit, Texture2D texture)
-    : Character(pos, hit, texture)
+    Enemy(Vector2 pos, Rectangle hit, Texture2D tex)
+    : Character(pos, hit, tex)
     {
 
     }
@@ -19,7 +27,7 @@ public:
     // void Draw() {
     //     DrawTexture(texture, position.x, position.y, WHITE);
     // }
-
+    
     void Move(int deltaX, int deltaY) {
         SetPosition({position.x + deltaX, position.y + deltaY});
     }
@@ -36,5 +44,9 @@ public:
             }
         }
         Move(moveToMake.x, moveToMake.y);
+    }
+
+    void Draw(Vector2 playerPos) {
+        DrawTextureEx(playerImage, {float(GetScreenWidth() / 2.f - 16 * 4) + (position.x - playerPos.x), float(GetScreenHeight() / 2.f - 16 * 4) + (position.y - playerPos.y)}, 0.f, 4.f, WHITE);
     }
 };
