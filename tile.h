@@ -7,8 +7,7 @@ public:
     int tileNumber;
     Vector2 position;
 
-    Tile(Texture2D texture, int num, Vector2 pos) {
-        tileImage = texture;
+    Tile(int num, Vector2 pos) {
         tileNumber = num;
         position = pos;
     }
