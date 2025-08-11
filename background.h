@@ -18,6 +18,7 @@ public:
     }
 
     void Generate() {
+        std::vector<Tile> previousTiles = {};
         std::vector<Vector2> occupiedPositions = {};
 
         Tile startingTile(0, {width/2, height/2});
@@ -26,7 +27,8 @@ public:
 
         bool isStillGenerating = true;
         while(isStillGenerating) {
-            for(const Tile& i : tiles) {
+            std::vector<Tile> currentTiles = {};
+            for(const Tile& i : previousTiles) {
                 if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x, i.position.y-1}) != occupiedPositions.end()) {
                     // Generate tile above
                 }
