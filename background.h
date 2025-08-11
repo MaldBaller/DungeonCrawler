@@ -23,6 +23,7 @@ public:
 
         Tile startingTile(0, {width/2, height/2});
         tiles.push_back(startingTile);
+        previousTiles.push_back(startingTile);
         occupiedPositions.push_back(startingTile.position);
 
         bool isStillGenerating = true;
