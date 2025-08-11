@@ -10,6 +10,7 @@ int randint(int min, int max) {
 	return (rand() + rand()) % (max + 1 - min) + min;
 }
 
+
 int main()
 {
     srand(time(NULL));
@@ -61,10 +62,7 @@ int main()
                 }
             }
             
-            if (weapon == 0) {
-                sword.Slash(enemy,player.rotation);
-                
-            }
+           
         }
 
         BeginDrawing();
@@ -73,8 +71,14 @@ int main()
 
             //Enemy draw
             for (int i = 0; i < enemy.size(); i++){
-                enemy.at(i).Draw(player.position);
+                
                 enemy.at(i).FollowPlayer(player.position);
+                enemy.at(i).Draw(player.position);
+
+                if (FindDistance(enemy.at(i).position, player.position) < 50){
+                    enemy.at(i).Move(enemy.at(i).speed * 1.1 * cos(GetAngleBetweenPoints(player.position,enemy.at(i).position)) , enemy.at(i).speed * 1.1 * sin(GetAngleBetweenPoints(player.position,enemy.at(i).position)) );
+                }
+                    
                 for (int j = 0; j < enemy.size(); j++){
                     if (j != i) {
                         if (FindDistance(enemy.at(i).position, enemy.at(j).position) < 50){
@@ -82,11 +86,40 @@ int main()
                         }
                     }
                 }
+                if (sword.cooldownFrame == -1){
+                    if(FindDistance(enemy[i].position,player.position) < 175) {
+                        
+                        if ((player.rotation == 0.f && player.position.y > enemy[i].position.y) || (player.rotation == 180 && player.position.y < enemy[i].position.y) || (player.rotation == 90 && player.position.x < enemy[i].position.x) || (player.rotation == 270 && player.position.x > enemy[i].position.x)){
+                            enemy[i].health -= sword.damage;
+                            enemy[i].Move(30 * cos(GetAngleBetweenPoints(player.position,enemy[i].position)),30 * sin(GetAngleBetweenPoints(player.position,enemy[i].position)));
+                        }
+                    }
+                }
+
+            }
+
+            if (weapon == 0) {
+                if (sword.cooldownFrame != 0){ sword.Slash();}
+                /*
+                if (sword.cooldownFrame == -1){
+                    for(int i; i < enemy.size(); i++) {
+                        if(FindDistance(enemy[i].position,player.position) < 60) {
+                            if ((player.rotation == 0 && player.position.y > enemy[i].position.y) || (player.rotation == 180 && player.position.y < enemy[i].position.y) || (player.rotation == 90 && player.position.x > enemy[i].position.x) || (player.rotation == 270 && player.position.x < enemy[i].position.x)){
+                                enemy[i].health -= sword.damage;
+                                enemy[i].Move(3 * cos(GetAngleBetweenPoints(player.position,enemy[i].position)),3 * sin(GetAngleBetweenPoints(player.position,enemy[i].position)));
+                            } 
+
+                        }
+                    }
+
+                }
+                */
             }
 
             player.Draw();
             DrawRectangleLines(float(GetScreenWidth() / 2.f - 16 * 4), float(GetScreenHeight() / 2.f - 16 * 4),player.hitbox.width,player.hitbox.height,RED);
             sword.Draw(player.rotation);
+            DrawCircleLines(float(GetScreenWidth() / 2.f), float(GetScreenHeight() / 2.f),175,WHITE);
             
         }
         
