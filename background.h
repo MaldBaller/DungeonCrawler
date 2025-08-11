@@ -25,10 +25,11 @@ public:
         occupiedPositions.push_back(startingTile.position);
 
         std::vector<Tile> previousTiles = {startingTile};
+        std::vector<Tile> currentTiles = {};
 
         bool isStillGenerating = true;
         while(isStillGenerating) {
-            std::vector<Tile> currentTiles = {};
+            currentTiles = {};
             for(const Tile& i : previousTiles) {
                 if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x, i.position.y-1}) != occupiedPositions.end()) {
                     // Generate tile above
