@@ -19,5 +19,10 @@ public:
     void Generate() {
         Tile startingTile(0, {width/2, height/2});
         tiles.push_back(startingTile);
+
+        bool isStillGenerating = true;
+        while(isStillGenerating) {
+            
+        }
     }
 };
