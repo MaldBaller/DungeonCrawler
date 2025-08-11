@@ -18,13 +18,13 @@ public:
     }
 
     void Generate() {
-        std::vector<Tile> previousTiles = {};
         std::vector<Vector2> occupiedPositions = {};
 
         Tile startingTile(0, {width/2, height/2});
         tiles.push_back(startingTile);
-        previousTiles.push_back(startingTile);
         occupiedPositions.push_back(startingTile.position);
+
+        std::vector<Tile> previousTiles = {startingTile};
 
         bool isStillGenerating = true;
         while(isStillGenerating) {
