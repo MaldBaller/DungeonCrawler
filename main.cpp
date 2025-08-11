@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <random>
+#include "sword.h"
 
 int randint(int min, int max) {
 	return (rand() + rand()) % (max + 1 - min) + min;
@@ -17,6 +18,7 @@ int main()
     Texture2D playerImage = LoadTexture("resources/player_0.png"); 
 
     Player player({0, 0}, {0,0,32*4,32*4}, playerImage);
+    Sword sword(LoadTexture("resources/sword_0.png"),10);
     int weapon = 0; //0 is sword 1 is mage
     std::vector <Enemy> enemy;
 
@@ -44,18 +46,25 @@ int main()
 
         // Movement
         if (gamemode == 1) {
-            if (IsKeyDown(KEY_W)) player.position.y -= player.speed;
-            if (IsKeyDown(KEY_S)) player.position.y += player.speed;
-            if (IsKeyDown(KEY_A)) player.position.x -= player.speed;
-            if (IsKeyDown(KEY_D)) player.position.x += player.speed;
+            if (IsKeyDown(KEY_W)) {player.position.y -= player.speed; player.rotation = 0.f;}
+            if (IsKeyDown(KEY_S)) {player.position.y += player.speed; player.rotation = 180.f;}
+            if (IsKeyDown(KEY_A)) {player.position.x -= player.speed; player.rotation = 270.f;}
+            if (IsKeyDown(KEY_D)) {player.position.x += player.speed; player.rotation = 90.f;}
             player.hitbox.x = player.position.x;
             player.hitbox.y = player.position.y;
-            if (weapon == 0){
-                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
-                    
+        
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+                if (weapon == 0){
+                    if (sword.cooldownFrame == 0) { sword.cooldownFrame = -1;}
+                }else{
+
                 }
             }
-
+            
+            if (weapon == 0) {
+                sword.Slash(enemy,player.rotation);
+                
+            }
         }
 
         BeginDrawing();
@@ -76,15 +85,15 @@ int main()
             }
 
             player.Draw();
-             DrawRectangleLines(float(GetScreenWidth() / 2.f - 16 * 4), float(GetScreenHeight() / 2.f - 16 * 4),player.hitbox.width,player.hitbox.height,RED);
-
+            DrawRectangleLines(float(GetScreenWidth() / 2.f - 16 * 4), float(GetScreenHeight() / 2.f - 16 * 4),player.hitbox.width,player.hitbox.height,RED);
+            sword.Draw(player.rotation);
             
         }
         
 
         EndDrawing();
     }
-
+    
     UnloadTexture(playerImage);
     CloseWindow();
 
