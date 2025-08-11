@@ -1,11 +1,12 @@
 // background.h
 #include "tile.h"
+#include <vector>
 
 class Background {
 public:
-    Vector2 tiles[0] = {};
+    std::vector<Tile> tiles;
     int level;
-    
+
     Background(int lvl) {
         level = lvl;
     }
