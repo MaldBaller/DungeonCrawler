@@ -26,11 +26,28 @@ public:
 
     void Draw(float rot) {
         if (cooldownFrame == -1) {
-            DrawTexturePro(swordImage, {0,0,30,50} ,{ float(GetScreenWidth() / 2.f),float(GetScreenHeight() / 2.f),150,250}, {75,250}, rot - 60 + slashFrame * 8, WHITE);
+            DrawTexturePro(swordImage, {0,0,32,32} ,{ float(GetScreenWidth() / 2.f),float(GetScreenHeight() / 2.f),200,200}, {100,190}, rot - 60 + slashFrame * 8, WHITE);
         }
     }
 
     void Slash() { // The list of enemies is in main, so the function needs to take it in
+        //DrawText((std::to_string(cooldownFrame)).c_str(),20,0,90,WHITE);
+        if (cooldownFrame > -1) { if (cooldownFrame > 0) { cooldownFrame--;} return;}
+        
+        //collider = {player.position.x,player.position.y,40,}
+
+
+        slashFrame ++;
+        
+        if (slashFrame > slashFrames){
+            slashFrame = 0;
+            cooldownFrame = cooldownFrames;
+        }
+
+        //Draw(playerDir - 60 + slashFrame);
+    }
+
+    void Parry() { // The list of enemies is in main, so the function needs to take it in
         //DrawText((std::to_string(cooldownFrame)).c_str(),20,0,90,WHITE);
         if (cooldownFrame > -1) { if (cooldownFrame > 0) { cooldownFrame--;} return;}
         

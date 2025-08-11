@@ -19,7 +19,7 @@ int main()
     Texture2D playerImage = LoadTexture("resources/player_0.png"); 
 
     Player player({0, 0}, {0,0,32*4,32*4}, playerImage);
-    Sword sword(LoadTexture("resources/sword_0.png"),10);
+    Sword sword(LoadTexture("resources/sword_0.png"),1);
     int weapon = 0; //0 is sword 1 is mage
     std::vector <Enemy> enemy;
 
@@ -87,13 +87,16 @@ int main()
                     }
                 }
                 if (sword.cooldownFrame == -1){
-                    if(FindDistance(enemy[i].position,player.position) < 175) {
+                    if(FindDistance(enemy[i].position,player.position) < 185) {
                         
                         if ((player.rotation == 0.f && player.position.y > enemy[i].position.y) || (player.rotation == 180 && player.position.y < enemy[i].position.y) || (player.rotation == 90 && player.position.x < enemy[i].position.x) || (player.rotation == 270 && player.position.x > enemy[i].position.x)){
                             enemy[i].health -= sword.damage;
                             enemy[i].Move(30 * cos(GetAngleBetweenPoints(player.position,enemy[i].position)),30 * sin(GetAngleBetweenPoints(player.position,enemy[i].position)));
                         }
                     }
+                }
+                if (enemy[i].health < 0){
+
                 }
 
             }
@@ -119,7 +122,7 @@ int main()
             player.Draw();
             DrawRectangleLines(float(GetScreenWidth() / 2.f - 16 * 4), float(GetScreenHeight() / 2.f - 16 * 4),player.hitbox.width,player.hitbox.height,RED);
             sword.Draw(player.rotation);
-            DrawCircleLines(float(GetScreenWidth() / 2.f), float(GetScreenHeight() / 2.f),175,WHITE);
+            DrawCircleLines(float(GetScreenWidth() / 2.f), float(GetScreenHeight() / 2.f),185,WHITE);
             
         }
         
