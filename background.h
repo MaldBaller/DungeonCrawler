@@ -2,6 +2,7 @@
 #pragma once
 #include "tile.h"
 #include <vector>
+#include <algorithm>
 
 class Background {
 public:
@@ -26,10 +27,18 @@ public:
         bool isStillGenerating = true;
         while(isStillGenerating) {
             for(const Tile& i : tiles) {
-                // Generate tile above if applicable
-                // Generate tile to right if applicable
-                // Generate tile below if applicable
-                // Generate tile to left if applicable
+                if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x, i.position.y-1}) != occupiedPositions.end()) {
+                    // Generate tile above
+                }
+                if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x, i.position.y+1}) != occupiedPositions.end()) {
+                    // Generate tile to right
+                }
+                if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x, i.position.y+1}) != occupiedPositions.end()) {
+                    // Generate tile below
+                }
+                if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x, i.position.y+1}) != occupiedPositions.end()) {
+                    // Generate tile below
+                }
             }
         }
     }
