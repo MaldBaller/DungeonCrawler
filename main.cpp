@@ -58,34 +58,31 @@ int main()
 
         // Movement
         if (gamemode == 1) {
-<<<<<<< HEAD
             if (IsKeyDown(KEY_W)){
                 player.position.y -= player.speed;
                 playerDir = down;
+                player.rotation = 0.f;
                 player.changeImage(playerImage);
 
             }
             if (IsKeyDown(KEY_S)){
                 player.position.y += player.speed;
                 playerDir = up;
+                player.rotation = 180.f;
                 player.changeImage(playerImage);
             }
             if (IsKeyDown(KEY_A)){
                 player.position.x -= player.speed;
                 playerDir = left;
+                player.rotation = 270.f;
                 player.changeImage(playerLeft);
             }
             if (IsKeyDown(KEY_D)){
                 player.position.x += player.speed;
                 playerDir = right;
+                player.rotation = 90.f;
                 player.changeImage(playerRight);
             }
-=======
-            if (IsKeyDown(KEY_W)) {player.position.y -= player.speed; player.rotation = 0.f;}
-            if (IsKeyDown(KEY_S)) {player.position.y += player.speed; player.rotation = 180.f;}
-            if (IsKeyDown(KEY_A)) {player.position.x -= player.speed; player.rotation = 270.f;}
-            if (IsKeyDown(KEY_D)) {player.position.x += player.speed; player.rotation = 90.f;}
->>>>>>> Chris-features
             player.hitbox.x = player.position.x;
             player.hitbox.y = player.position.y;
         
@@ -97,15 +94,7 @@ int main()
                 }
             }
             
-<<<<<<< HEAD
-
-
-                
-
             
-=======
-           
->>>>>>> Chris-features
         }
 
         BeginDrawing();
