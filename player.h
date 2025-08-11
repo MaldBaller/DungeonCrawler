@@ -10,16 +10,16 @@ public:
     int gold;
     std::vector<Item> inventory;
 
-    Player(Vector2 pos, Rectangle hit, Texture2D texture)
-        : Character(pos, hit, texture)
+    Player(Vector2 pos, Rectangle hit, Texture2D tex)
+        : Character(pos, hit, tex)
     {
         experience = 0;
         gold = 0;
 
     }
 
-    void Draw() override {
-        DrawTexture(playerImage, position.x, position.y, WHITE);
+    void Draw() {
+        DrawTextureEx(playerImage, {float(GetScreenWidth() / 2.f - 16 * 4), float(GetScreenHeight() / 2.f - 16 * 4)}, 0.f, 4.f, WHITE);
     }
 
     void changeImage(Texture2D image){
