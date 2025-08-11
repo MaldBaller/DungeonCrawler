@@ -15,9 +15,14 @@ public:
     {
         experience = 0;
         gold = 0;
+
     }
 
     void Draw() override {
         DrawTexture(playerImage, position.x, position.y, WHITE);
+    }
+
+    void changeImage(Texture2D image){
+        playerImage = image;
     }
 };
