@@ -13,5 +13,8 @@ public:
         level = lvl;
         height = hei;
         width = wid;
+
+        Tile startingTile(0, {width/2, height/2});
+        tiles.push_back(startingTile);
     }
 };
