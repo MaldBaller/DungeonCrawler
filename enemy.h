@@ -4,6 +4,7 @@
 #include "raymath.h"
 
 
+
 float GetAngleBetweenPoints(Vector2 a, Vector2 b) {
     float dx = b.x - a.x;
     float dy = b.y - a.y;
@@ -46,6 +47,8 @@ public:
             }
         }
         Move(moveToMake.x, moveToMake.y);
+
+        
     }
     // void FollowPlayer(Vector2 playerPosition) {
     //     float angleToPlayer = GetAngleBetweenPoints(position, playerPosition);
