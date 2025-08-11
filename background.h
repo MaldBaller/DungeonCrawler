@@ -25,7 +25,12 @@ public:
 
         bool isStillGenerating = true;
         while(isStillGenerating) {
-            
+            for(const Tile& i : tiles) {
+                // Generate tile above if applicable
+                // Generate tile to right if applicable
+                // Generate tile below if applicable
+                // Generate tile to left if applicable
+            }
         }
     }
 };
