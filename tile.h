@@ -2,6 +2,7 @@
 #include "raylib.h"
 
 class Tile {
+public:
     Texture2D tileImage;
     Vector2 position;
 
