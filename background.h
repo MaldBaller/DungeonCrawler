@@ -1,4 +1,5 @@
 // background.h
+#pragma once
 #include "tile.h"
 #include <vector>
 

@@ -1,4 +1,5 @@
 // tile.h
+#pragma once
 #include "raylib.h"
 
 class Tile {
