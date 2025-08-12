@@ -22,6 +22,21 @@ public:
         int right = 0;
         int below = 0;
         int left  = 0;
+
+        for(const Tile& i : previousTiles) {
+            if(i.position.x == position.x && i.position.y == position.y-1) {
+                above = i.tileNumber;
+            }
+            if(i.position.x == position.x+1 && i.position.y == position.y) {
+                right = i.tileNumber;
+            }
+            if(i.position.x == position.x && i.position.y == position.y+1) {
+                below = i.tileNumber;
+            }
+            if(i.position.x == position.x-1 && i.position.y == position.y) {
+                left = i.tileNumber;
+            }
+        }
         // create one that fits all (somehow...)
     }
 
