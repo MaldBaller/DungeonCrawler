@@ -16,14 +16,19 @@ public:
         height = hei;
         width = wid;
     }
+
     void CreateValidTile(Vector2 position, std::vector<Tile> previousTiles) {
-        
+        int above = 0; // tile number of adjacent tiles (0 means no tile)
+        int right = 0;
+        int below = 0;
+        int left  = 0;
+        // create one that fits all (somehow...)
     }
 
     void Generate() {
         std::vector<Vector2> occupiedPositions = {};
 
-        Tile startingTile(0, {0, 0});
+        Tile startingTile(1, {0, 0});
         tiles.push_back(startingTile);
         occupiedPositions.push_back(startingTile.position);
 
