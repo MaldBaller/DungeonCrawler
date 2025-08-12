@@ -16,6 +16,9 @@ public:
         height = hei;
         width = wid;
     }
+    void CreateValidTile() {
+        
+    }
 
     void Generate() {
         std::vector<Vector2> occupiedPositions = {};
