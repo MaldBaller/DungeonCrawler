@@ -16,7 +16,7 @@ public:
         height = hei;
         width = wid;
     }
-    void CreateValidTile() {
+    void CreateValidTile(Vector2 position, std::vector<Tile> previousTiles) {
         
     }
 
