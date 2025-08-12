@@ -9,10 +9,12 @@ class Projectile{
 public:
     Texture2D projImage;
     int damage;
-    Vector2 projPos;
+    Vector2 position;
+    float direction;
+    float speed;
 
     Projectile(Texture2D img, int dam, Vector2 pos){
-        projPos=pos;
+        position =pos;
         damage=dam;
         projImage=img;
     }
@@ -21,21 +23,12 @@ public:
 
     
     void Draw() {
-        DrawTexture(projImage, projPos.x, projPos.y, WHITE);
+        DrawTexture(projImage, position.x, position.y, WHITE);
     }
     
-    void Update(int speed, string direction){
-        if (direction=="right"){
-            projPos.x+=speed;
-        }
-    else if (direction=="left"){
-            projPos.x-=speed; 
-        }
-    else if (direction=="up"){
-            projPos.y+=speed; 
-        }
-    else if (direction=="down"){
-            projPos.y-=speed; 
-        }
+    void Move(float spe, float dir){
+        direction = dir;
+        speed = spe;
+        position += {speed * cos(direction),speed * sin(direction)};
     }
 };

@@ -19,10 +19,13 @@ float FindDistance(Vector2 position1, Vector2 position2) {
 
 class Enemy : public Character {
 public:
-    Enemy(Vector2 pos, Rectangle hit, Texture2D tex, float hp)
+    int type;
+    Enemy(Vector2 pos, Rectangle hit, Texture2D tex, float hp, int typ)
     : Character(pos, hit, tex)
     {
         health = hp;
+        maxHealth = hp;
+        type = typ;
     }
     
     // void Draw() {
@@ -46,7 +49,12 @@ public:
                 moveToMake = positionChanges[i];
             }
         }
-        Move(moveToMake.x, moveToMake.y);
+        if (FindDistance(playerPosition,position) > 400 || type != 1){
+            Move(moveToMake.x, moveToMake.y);
+
+        }else{
+            
+        }
 
         
     }

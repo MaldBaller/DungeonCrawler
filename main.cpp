@@ -6,6 +6,7 @@
 #include "projectile.h"
 #include <random>
 #include "sword.h"
+#include "health.h"
 
 int randint(int min, int max) {
 	return (rand() + rand()) % (max + 1 - min) + min;
@@ -22,12 +23,13 @@ int main()
     Texture2D playerLeft = LoadTexture("resources/left_looking_knight.png"); 
 
     Player player({0, 0}, {0,0,32*4,32*4}, playerImage);
-    Sword sword(LoadTexture("resources/sword_0.png"),1);
+    Sword sword(LoadTexture("resources/sword_0.png"),4);
     int weapon = 0; //0 is sword 1 is mage
+    Bar bar(10);
     std::vector <Enemy> enemy;
 
-    for(int i = 0; i < 2; i++){
-        enemy.push_back(Enemy( {float(randint(-400,400)),float(randint(-400,400))}, {0,0,32*4,32*4}, LoadTexture("resources/enemy_0_0.png"), 50.0));
+    for(int i = 0; i < 200; i++){
+        enemy.push_back(Enemy( {float(randint(-900,900)),float(randint(-900,900))}, {0,0,32*4,32*4}, LoadTexture("resources/enemy_0_0.png"), 50.0, randint(0,1)));
     }
 
     int screenX = GetScreenWidth();
@@ -103,9 +105,9 @@ int main()
 
             //Enemy draw
             for (int i = 0; i < enemy.size(); i++){
-                
+
                 enemy.at(i).FollowPlayer(player.position);
-                enemy.at(i).Draw(player.position);
+                
 
                 if (FindDistance(enemy.at(i).position, player.position) < 50){
                     enemy.at(i).Move(enemy.at(i).speed * 1.1 * cos(GetAngleBetweenPoints(player.position,enemy.at(i).position)) , enemy.at(i).speed * 1.1 * sin(GetAngleBetweenPoints(player.position,enemy.at(i).position)) );
@@ -123,12 +125,17 @@ int main()
                         
                         if ((player.rotation == 0.f && player.position.y > enemy[i].position.y) || (player.rotation == 180 && player.position.y < enemy[i].position.y) || (player.rotation == 90 && player.position.x < enemy[i].position.x) || (player.rotation == 270 && player.position.x > enemy[i].position.x)){
                             enemy[i].health -= sword.damage;
-                            enemy[i].Move(30 * cos(GetAngleBetweenPoints(player.position,enemy[i].position)),30 * sin(GetAngleBetweenPoints(player.position,enemy[i].position)));
+                            enemy[i].Move(10 * cos(GetAngleBetweenPoints(player.position,enemy[i].position)),10 * sin(GetAngleBetweenPoints(player.position,enemy[i].position)));
                         }
                     }
                 }
-                if (enemy[i].health < 0){
 
+                if (enemy[i].health < 0){
+                    enemy.erase(enemy.begin() + i);
+                }else{
+                    enemy.at(i).Draw(player.position);
+                    bar.Draw({float(GetScreenWidth() / 2.f + (enemy[i].position.x - player.position.x)), float(GetScreenHeight() / 2.f + (enemy[i].position.y - player.position.y))},enemy[i].maxHealth,enemy[i].health);
+                    //float(GetScreenWidth() / 2.f - 16 * 4) + (hitbox.x - playerPos.x)
                 }
 
             }
