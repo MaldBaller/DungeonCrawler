@@ -18,22 +18,16 @@ public:
     }
 
     void CreateValidTile(Vector2 position, std::vector<Tile> previousTiles) {
-        int above = 0; // tile number of adjacent tiles (0 means no tile)
-        int right = 0;
-        int below = 0;
-        int left  = 0;
+        int above=0, right=0, below=0, left=0;
 
         for(const Tile& i : previousTiles) {
             if(i.position.x == position.x && i.position.y == position.y-1) {
                 above = i.tileNumber;
-            }
-            if(i.position.x == position.x+1 && i.position.y == position.y) {
+            } else if(i.position.x == position.x+1 && i.position.y == position.y) {
                 right = i.tileNumber;
-            }
-            if(i.position.x == position.x && i.position.y == position.y+1) {
+            } else if(i.position.x == position.x && i.position.y == position.y+1) {
                 below = i.tileNumber;
-            }
-            if(i.position.x == position.x-1 && i.position.y == position.y) {
+            } else if(i.position.x == position.x-1 && i.position.y == position.y) {
                 left = i.tileNumber;
             }
         }
@@ -56,14 +50,11 @@ public:
             for(const Tile& i : previousTiles) {
                 if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x, i.position.y-1}) != occupiedPositions.end()) {
                     // Generate tile above
-                }
-                if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x+1, i.position.y}) != occupiedPositions.end()) {
+                } else if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x+1, i.position.y}) != occupiedPositions.end()) {
                     // Generate tile to right
-                }
-                if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x, i.position.y+1}) != occupiedPositions.end()) {
+                } else if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x, i.position.y+1}) != occupiedPositions.end()) {
                     // Generate tile below
-                }
-                if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x-1, i.position.y}) != occupiedPositions.end()) {
+                } else if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x-1, i.position.y}) != occupiedPositions.end()) {
                     // Generate tile to left
                 }
             }
