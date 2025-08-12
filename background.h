@@ -23,7 +23,7 @@ public:
     void Generate() {
         std::vector<Vector2> occupiedPositions = {};
 
-        Tile startingTile(0, {width/2, height/2});
+        Tile startingTile(0, {0, 0});
         tiles.push_back(startingTile);
         occupiedPositions.push_back(startingTile.position);
 
