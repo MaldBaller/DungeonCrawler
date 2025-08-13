@@ -75,12 +75,12 @@ public:
         }
 
         // pick a random one
-        std::srand(std::time({})); // use current time as seed for random generator
         Tile finalTile(validTiles[std::rand() % validTiles.size()], position);
         return(finalTile);
     }
 
     void Generate() {
+        std::srand(std::time({})); // use current time as seed for random generator
         std::vector<Vector2> occupiedPositions = {};
 
         // start on an empty tile in the middle
