@@ -109,7 +109,7 @@ public:
                 }
             }
 
-            if(currentTiles == std::vector<Tile> {}) {break;}
+            if(currentTiles.size() == 0) {break;}
             tiles.insert(tiles.end(), currentTiles.begin(), currentTiles.end());
         }
     }
