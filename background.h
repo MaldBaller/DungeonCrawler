@@ -48,7 +48,7 @@ public:
                 left = i.tileNumber;
             }
         }
-        // create one that fits all (somehow...)
+        // create one that fits all
     }
 
     void Generate() {
@@ -77,6 +77,8 @@ public:
                     // Generate tile to left
                 }
             }
+
+            //know when to end loop
         }
     }
 };
