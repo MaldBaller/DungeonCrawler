@@ -65,6 +65,8 @@ public:
                 if(std::find(j[0].begin(), j[0].end(), i) != j[0].end() && std::find(j[1].begin(), j[1].end(), below) != j[1].end()) {valid += 1}
             }
         }
+
+        // pick a random one
     }
 
     void Generate() {
