@@ -98,10 +98,10 @@ public:
                 if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x, i.position.y-1}) != occupiedPositions.end() && i.position.y-1 >= -(height/2)) {
                     currentTiles.push_back(CreateValidTile(Vector2{i.position.x, i.position.y-1}, previousTiles));
                 } 
-                else if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x+1, i.position.y}) != occupiedPositions.end() && i.position.x+1 <= (width/2)) {
+                else if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x+1, i.position.y}) != occupiedPositions.end() && i.position.x+1 < (width/2.0)) {
                     currentTiles.push_back(CreateValidTile(Vector2{i.position.x+1, i.position.y}, previousTiles));
                 } 
-                else if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x, i.position.y+1}) != occupiedPositions.end() && i.position.y+1 <= (height/2)) {
+                else if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x, i.position.y+1}) != occupiedPositions.end() && i.position.y+1 < (height/2.0)) {
                     currentTiles.push_back(CreateValidTile(Vector2{i.position.x, i.position.y+1}, previousTiles));
                 } 
                 else if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x-1, i.position.y}) != occupiedPositions.end() && i.position.x-1 >= -(width/2)) {
