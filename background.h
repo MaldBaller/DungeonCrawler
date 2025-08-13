@@ -114,9 +114,9 @@ public:
         }
     }
 
-    void Draw() {
+    void Draw(Vector2 playerPos) {
         for(const Tile& i : tiles) {
-            i.Draw()
+            i.Draw(playerPos)
         }
     }
 };
