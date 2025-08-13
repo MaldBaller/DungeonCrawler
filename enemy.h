@@ -19,13 +19,16 @@ float FindDistance(Vector2 position1, Vector2 position2) {
 
 class Enemy : public Character {
 public:
-    int type;
-    Enemy(Vector2 pos, Rectangle hit, Texture2D tex, float hp, int typ)
+    int type; // 0 is melee 1 is range
+    int cooldown = 0;
+    int damage;
+    Enemy(Vector2 pos, Rectangle hit, Texture2D tex, float hp, int typ, int dmg)
     : Character(pos, hit, tex)
     {
         health = hp;
         maxHealth = hp;
         type = typ;
+        damage = dmg;
     }
     
     // void Draw() {
@@ -51,9 +54,14 @@ public:
         }
         if (FindDistance(playerPosition,position) > 400 || type != 1){
             Move(moveToMake.x, moveToMake.y);
+            if (type == 0 && FindDistance(playerPosition,position) < 90 && cooldown == 0){
+                cooldown = -1;
+            }
 
         }else{
-            
+            if (cooldown == 0){
+                cooldown = -1;
+            }
         }
 
         

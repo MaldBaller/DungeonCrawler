@@ -10,6 +10,9 @@ public:
     Rectangle hitbox;
     float rotation = 0.f;
     Texture2D playerImage;
+    int frame = 0;
+    int maxFrame = 60;
+    bool isWalking = false;
 
     //Atributes
     float speed;
@@ -26,6 +29,7 @@ public:
         hitbox = hit;
         playerImage = texture;
         speed = 2.0f;
+        
     }
 
     void SetPosition(Vector2 pos){
