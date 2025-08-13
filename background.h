@@ -61,12 +61,12 @@ public:
         //find which tiles are valid in that position
         for(int i = 1; i <= 14; i++) {
             for(const std::vector<int> j[2] : lrConnections) {
-                if(std::find(j[0].begin(), j[0].end(), left) != j[0].end() && std::find(j[1].begin(), j[1].end(), i) != j[1].end()) {valid += 1}
-                if(std::find(j[0].begin(), j[0].end(), i) != j[0].end() && std::find(j[1].begin(), j[1].end(), right) != j[1].end()) {valid += 1}
+                if(std::find(j[0].begin(), j[0].end(), left) != j[0].end() && std::find(j[1].begin(), j[1].end(), i) != j[1].end()) {valid += 1;}
+                if(std::find(j[0].begin(), j[0].end(), i) != j[0].end() && std::find(j[1].begin(), j[1].end(), right) != j[1].end()) {valid += 1;}
             }
             for(const std::vector<int> j[2] : udConnections) {
-                if(std::find(j[0].begin(), j[0].end(), above) != j[0].end() && std::find(j[1].begin(), j[1].end(), i) != j[1].end()) {valid += 1}
-                if(std::find(j[0].begin(), j[0].end(), i) != j[0].end() && std::find(j[1].begin(), j[1].end(), below) != j[1].end()) {valid += 1}
+                if(std::find(j[0].begin(), j[0].end(), above) != j[0].end() && std::find(j[1].begin(), j[1].end(), i) != j[1].end()) {valid += 1;}
+                if(std::find(j[0].begin(), j[0].end(), i) != j[0].end() && std::find(j[1].begin(), j[1].end(), below) != j[1].end()) {valid += 1;}
             }
             if(valid == 4) {
                 validTiles.push_back(i);
@@ -109,7 +109,7 @@ public:
                 }
             }
 
-            if(currentTiles == {}) {break;}
+            if(currentTiles == std::vector<Tile> {}) {break;}
             tiles.insert(tiles.end(), currentTiles.begin(), currentTiles.end());
         }
     }
