@@ -117,6 +117,19 @@ public:
                 occupiedPositions.push_back(i.position);
             }
         }
+
+        // They are all empty strangely often, this prevents that from happening
+        bool regenerate = true;
+        for(const Tile& i : tiles) {
+            if(i.tileNumber != 1) {
+                regenerate = false;
+                break;
+            }
+        }
+        if(regenerate) {
+            tiles = {};
+            Generate();
+        }
     }
 
     void Draw(Vector2 playerPos) {
