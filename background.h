@@ -7,6 +7,8 @@
 #include <ctime>
 
 // these are used to determine valid tile connections
+// see "tile reference.png" to see what the numbers mean
+
 // left first, right second
 const std::vector<std::vector<int>[2]> lrConnections = {
     {{0, 1, 4, 12, 13}, {0, 1, 2, 10, 11}},
