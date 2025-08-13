@@ -7,10 +7,10 @@
 // these are used to determine valid tile connections
 // left first, right second
 const std::vector<std::vector<int>[2]> lrConnections = {
-    {{1, 4, 12, 13}, {0, 1, 2, 10, 11}},
-    {{2, 6, 7, 14},  {0, 4, 8, 9, 14}},
-    {{3, 8, 11},     {0, 3, 7, 12}},
-    {{5, 9, 10},     {0, 5, 6, 13}}
+    {{0, 1, 4, 12, 13}, {0, 1, 2, 10, 11}},
+    {{0, 2, 6, 7, 14},  {0, 4, 8, 9, 14}},
+    {{0, 3, 8, 11},     {0, 3, 7, 12}},
+    {{0, 5, 9, 10},     {0, 5, 6, 13}}
 };
 // top first, bottom second
 const std::vector<std::vector<int>[2]> udConnections = {
