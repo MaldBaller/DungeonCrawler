@@ -29,6 +29,7 @@ public:
     Tile(int num, Vector2 pos) {
         tileNumber = num;
         position = pos;
+        tileImage = LoadTexture(textureList[tileNumber]);
     }
 
     void Draw(Vector2 playerPos) {
