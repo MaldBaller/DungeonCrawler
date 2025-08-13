@@ -13,10 +13,10 @@ const char * textureList[15] {
     "resources/bottom_right_corner_wall.png",
     "resources/bottom_left_corner_wall.png",
     "resources/top_left_corner_wall.png",
-    "resources/top_right_square",
-    "resources/bottom_right_square",
-    "resources/bottom_left_square",
-    "resources/top_left_square",
+    "resources/top_right_square.png",
+    "resources/bottom_right_square.png",
+    "resources/bottom_left_square.png",
+    "resources/top_left_square.png",
     "resources/tile_14.png"
 };
 
