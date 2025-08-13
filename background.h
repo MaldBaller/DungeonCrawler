@@ -3,6 +3,8 @@
 #include "tile.h"
 #include <vector>
 #include <algorithm>
+#include <cstdlib>
+#include <ctime>
 
 // these are used to determine valid tile connections
 // left first, right second
@@ -33,7 +35,7 @@ public:
         width = wid;
     }
 
-    void CreateValidTile(Vector2 position, std::vector<Tile> previousTiles) {
+    Tile CreateValidTile(Vector2 position, std::vector<Tile> previousTiles) {
         // find any adjacent tiles (0 means no tile)
         int above=0, right=0, below=0, left=0;
 
@@ -70,6 +72,9 @@ public:
         }
 
         // pick a random one
+        std::srand(std::time({})); // use current time as seed for random generator
+        Tile finalTile(validTiles[std::rand() % validTiles.size()]);
+        return(finalTile)
     }
 
     void Generate() {
@@ -89,13 +94,16 @@ public:
             currentTiles = {};
             for(const Tile& i : previousTiles) {
                 if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x, i.position.y-1}) != occupiedPositions.end()) {
-                    // Generate tile above
-                } else if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x+1, i.position.y}) != occupiedPositions.end()) {
-                    // Generate tile to right
-                } else if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x, i.position.y+1}) != occupiedPositions.end()) {
-                    // Generate tile below
-                } else if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x-1, i.position.y}) != occupiedPositions.end()) {
-                    // Generate tile to left
+                    currentTiles.push_back(CreateValidTile(Vector2{i.position.x, i.position.y-1}, previousTiles));
+                } 
+                else if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x+1, i.position.y}) != occupiedPositions.end()) {
+                    currentTiles.push_back(CreateValidTile(Vector2{i.position.x+1, i.position.y}, previousTiles));
+                } 
+                else if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x, i.position.y+1}) != occupiedPositions.end()) {
+                    currentTiles.push_back(CreateValidTile(Vector2{i.position.x, i.position.y+1}, previousTiles));
+                } 
+                else if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x-1, i.position.y}) != occupiedPositions.end()) {
+                    currentTiles.push_back(CreateValidTile(Vector2{i.position.x-1, i.position.y}, previousTiles));
                 }
             }
 
