@@ -107,7 +107,8 @@ public:
                 }
             }
 
-            //know when to end loop
+            if(currentTiles == {}) {break;}
+            tiles.insert(tiles.end(), currentTiles);
         }
     }
 };
