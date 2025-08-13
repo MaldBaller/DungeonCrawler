@@ -4,6 +4,22 @@
 #include <vector>
 #include <algorithm>
 
+// these are used to determine valid tile connections
+// left first, right second
+const std::vector<std::vector<int>[2]> lrConnections = {
+    {{1, 4, 12, 13}, {1, 2, 10, 11}},
+    {{2, 6, 7, 14}, {4, 8, 9, 14}},
+    {{3, 8, 11}, {3, 7, 12}},
+    {{5, 9, 10}, {5, 6, 13}}
+};
+// top first, bottom second
+const std::vector<std::vector<int>[2]> udConnections = {
+    {{1, 5, 10, 13}, {1, 3, 11, 12}},
+    {{3, 7, 8, 14}, {5, 6, 9, 14}},
+    {{4, 9, 12}, {4, 8, 13}},
+    {{2, 6, 11}, {2, 7, 10}}
+};
+
 class Background {
 public:
     std::vector<Tile> tiles;
