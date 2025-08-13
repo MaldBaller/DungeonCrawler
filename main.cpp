@@ -7,11 +7,13 @@
 #include <random>
 #include "sword.h"
 #include "health.h"
+#include <chrono>
 
 int randint(int min, int max) {
 	return (rand() + rand()) % (max + 1 - min) + min;
 }
 
+using namespace std::chrono;
 
 int main()
 {
@@ -37,12 +39,23 @@ int main()
     Bar bar(10);
     std::vector <Enemy> enemy;
 
+    auto timeStart = steady_clock::now();
+    auto time = steady_clock::now();
+    int yellowTime = 0;
+    bool toggle = false;
+    //int seconds
+
     for(int i = 0; i < 4; i++){
         enemy.push_back(Enemy( {float(randint(-900,900)),float(randint(-900,900))}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 50.0, randint(0,1),30));
     }
 
+    int enemiesKilled = 0;
+    int damageDelt = 0; 
+    int score = 0;
+
+
     int screenX = GetScreenWidth();
-    int screeny = GetScreenHeight();
+    int screenY = GetScreenHeight();
     
     
     int gamemode = 1;
@@ -63,16 +76,24 @@ int main()
         if (IsKeyPressed(KEY_F11)) {
             ToggleFullscreen();
             screenX = GetScreenWidth();
-            screeny = GetScreenHeight();
+            screenY = GetScreenHeight();
         }
 
+        time = steady_clock::now();
 
         // Movement
         if (gamemode == 1) {
+            
+            if (time - timeStart >= seconds{ 1 }) {
+                timeStart = time;
+                score += 10;
+            }
+
+
             //player.changeImage(playerDown);
             player.isWalking = false;
             if (player.frame > player.maxFrame) { player.frame = 0;}
-            if (IsKeyDown(KEY_W)){
+            if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)){
                 player.position.y -= player.speed;
                 playerDir = down;
                 player.rotation = 0.f;
@@ -88,7 +109,7 @@ int main()
                 
                 player.isWalking = true;
             }
-            if (IsKeyDown(KEY_S)){
+            if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN)){
                 player.position.y += player.speed;
                 playerDir = up;
                 player.rotation = 180.f;
@@ -104,7 +125,7 @@ int main()
 
                 player.isWalking = true;
             }
-            if (IsKeyDown(KEY_A)){
+            if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)){
                 player.position.x -= player.speed;
                 playerDir = left;
                 player.rotation = 270.f;
@@ -120,7 +141,7 @@ int main()
 
                 player.isWalking = true;
             }
-            if (IsKeyDown(KEY_D)){
+            if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)){
                 player.position.x += player.speed;
                 playerDir = right;
                 player.rotation = 90.f;
@@ -149,6 +170,14 @@ int main()
                 }
             }
             
+            if (player.health > 0){
+                player.health += 0.01;
+                if (player.health > player.maxHealth){ player.health = player.maxHealth; }
+            }else {
+                gamemode  = 2;
+                enemy.clear();
+                projectile.clear();
+            }
             
         }
 
@@ -178,6 +207,7 @@ int main()
                         
                         if ((player.rotation == 0.f && player.position.y > enemy[i].position.y) || (player.rotation == 180 && player.position.y < enemy[i].position.y) || (player.rotation == 90 && player.position.x < enemy[i].position.x) || (player.rotation == 270 && player.position.x > enemy[i].position.x)){
                             enemy[i].health -= sword.damage;
+                            damageDelt += sword.damage;
                             enemy[i].Move(10 * cos(GetAngleBetweenPoints(player.position,enemy[i].position)),10 * sin(GetAngleBetweenPoints(player.position,enemy[i].position)));
                         }
                     }
@@ -185,7 +215,7 @@ int main()
 
                 if (enemy[i].cooldown > 0){enemy[i].cooldown--;}
                 if (enemy[i].cooldown == -1 && enemy[i].type == 1){
-                    projectile.push_back(Projectile(LoadTexture("resources/mid_flame.png"),enemy[i].damage/5.f,enemy[i].position,GetAngleBetweenPoints(enemy[i].position,player.position),10,60,1));
+                    projectile.push_back(Projectile(LoadTexture("resources/mid_flame.png"),enemy[i].damage,enemy[i].position,GetAngleBetweenPoints(enemy[i].position,player.position),10,60,1));
                     enemy[i].cooldown = 600;
                 }if (enemy[i].cooldown == -1 && enemy[i].type == 0){
                     player.health -= enemy[i].damage;
@@ -195,6 +225,9 @@ int main()
 
                 if (enemy[i].health < 0){
                     enemy.erase(enemy.begin() + i);
+                    enemiesKilled++;
+                    score += 100;
+                    yellowTime = 120;
                 }else{
                     enemy.at(i).Draw(player.position);
                     bar.Draw({float(GetScreenWidth() / 2.f + (enemy[i].position.x - player.position.x)), float(GetScreenHeight() / 2.f + (enemy[i].position.y - player.position.y))},enemy[i].maxHealth,enemy[i].health);
@@ -219,7 +252,7 @@ int main()
 
                 if (FindDistance(player.position,projectile[i].position) < 50){
                     if (projectile[i].ttl > 0){ projectile[i].ttl = 0;}
-                    if (projectile[i].ttl % 10 == 0) {
+                    if (projectile[i].ttl % 20 == 0) {
                         player.health-=projectile[i].damage;
                         player.position += {20 * cos(GetAngleBetweenPoints(projectile[i].position,player.position)),20 * sin(GetAngleBetweenPoints(projectile[i].position,player.position))};
                     }
@@ -246,12 +279,48 @@ int main()
         
             player.Draw();
             bar.Draw({float(GetScreenWidth() / 2.f ), float(GetScreenHeight() / 2.f)},player.maxHealth,player.health);
-            DrawRectangleLines(float(GetScreenWidth() / 2.f - 16 * 4), float(GetScreenHeight() / 2.f - 16 * 4),player.hitbox.width,player.hitbox.height,RED);
+            //DrawRectangleLines(float(GetScreenWidth() / 2.f - 16 * 4), float(GetScreenHeight() / 2.f - 16 * 4),player.hitbox.width,player.hitbox.height,RED);
             sword.Draw(player.rotation);
-            DrawCircleLines(float(GetScreenWidth() / 2.f), float(GetScreenHeight() / 2.f),185,WHITE);
+            //DrawCircleLines(float(GetScreenWidth() / 2.f), float(GetScreenHeight() / 2.f),185,WHITE);
             
+            buffer = "Score: " + std::to_string(score);
+            if (yellowTime <= 0){
+                DrawTextEx(GetFontDefault(),buffer.c_str(),{0,0},50,3,WHITE);
+            }else{
+                DrawTextEx(GetFontDefault(),buffer.c_str(),{0,0},50,3,YELLOW);
+                yellowTime--;
+            }
+
+
+
         }
         
+
+        if (gamemode == 2){
+            DrawTextEx(GetFontDefault(),"You Died...",{screenX / 2.f - 100,screenY / 3.f},80,3,RED);
+            buffer = "Mosters Killed: " + std::to_string(enemiesKilled);
+            DrawTextEx(GetFontDefault(),buffer.c_str() ,{screenX / 2.f - 100,screenY / 2.f},50,3,WHITE);
+            buffer = "Damage Dealt: " + std::to_string(damageDelt);
+            DrawTextEx(GetFontDefault(),buffer.c_str(),{screenX / 2.f - 100,screenY / 2.f + 100},50,3,WHITE);
+            buffer = "Final Score: " + std::to_string(score);
+            DrawTextEx(GetFontDefault(),buffer.c_str(),{screenX / 2.f - 100,screenY / 2.f + 200},60,3,YELLOW);
+
+            if (time - timeStart >= seconds{ 1 }) {
+                timeStart = time;
+                toggle = !toggle;
+            }if (toggle){DrawTextEx(GetFontDefault(),"Press space to continue..",{screenX / 2.f - 100,screenY / 2.f + 350},50,3,WHITE);}
+
+            if (IsKeyDown(KEY_SPACE)){
+                gamemode = -1;
+            }
+
+
+        }
+
+        if (gamemode == -1){
+            gamemode = 0;
+            
+        }
 
         EndDrawing();
     }

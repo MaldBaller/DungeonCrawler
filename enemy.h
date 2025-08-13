@@ -52,7 +52,7 @@ public:
                 moveToMake = positionChanges[i];
             }
         }
-        if (FindDistance(playerPosition,position) > 400 || type != 1){
+        if (FindDistance(playerPosition,position) > 450 || type != 1){
             Move(moveToMake.x, moveToMake.y);
             if (type == 0 && FindDistance(playerPosition,position) < 90 && cooldown == 0){
                 cooldown = -1;
