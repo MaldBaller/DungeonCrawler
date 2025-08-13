@@ -60,11 +60,11 @@ public:
 
         //find which tiles are valid in that position
         for(int i = 1; i <= 14; i++) {
-            for(const std::vector<int>[2]& j : lrConnections) {
+            for(const std::vector<int> j[2] : lrConnections) {
                 if(std::find(j[0].begin(), j[0].end(), left) != j[0].end() && std::find(j[1].begin(), j[1].end(), i) != j[1].end()) {valid += 1}
                 if(std::find(j[0].begin(), j[0].end(), i) != j[0].end() && std::find(j[1].begin(), j[1].end(), right) != j[1].end()) {valid += 1}
             }
-            for(const std::vector<int>[2]& j : udConnections) {
+            for(const std::vector<int> j[2] : udConnections) {
                 if(std::find(j[0].begin(), j[0].end(), above) != j[0].end() && std::find(j[1].begin(), j[1].end(), i) != j[1].end()) {valid += 1}
                 if(std::find(j[0].begin(), j[0].end(), i) != j[0].end() && std::find(j[1].begin(), j[1].end(), below) != j[1].end()) {valid += 1}
             }
@@ -75,8 +75,8 @@ public:
 
         // pick a random one
         std::srand(std::time({})); // use current time as seed for random generator
-        Tile finalTile(validTiles[std::rand() % validTiles.size()]);
-        return(finalTile)
+        Tile finalTile(validTiles[std::rand() % validTiles.size()], position);
+        return(finalTile);
     }
 
     void Generate() {
@@ -110,13 +110,13 @@ public:
             }
 
             if(currentTiles == {}) {break;}
-            tiles.insert(tiles.end(), currentTiles);
+            tiles.insert(tiles.end(), currentTiles.begin(), currentTiles.end());
         }
     }
 
     void Draw(Vector2 playerPos) {
-        for(const Tile& i : tiles) {
-            i.Draw(playerPos)
+        for(Tile& i : tiles) {
+            i.Draw(playerPos);
         }
     }
 };
