@@ -34,6 +34,7 @@ public:
     }
 
     void CreateValidTile(Vector2 position, std::vector<Tile> previousTiles) {
+        // find any adjacent tiles (0 means no tile)
         int above=0, right=0, below=0, left=0;
 
         for(const Tile& i : previousTiles) {
@@ -53,6 +54,7 @@ public:
     void Generate() {
         std::vector<Vector2> occupiedPositions = {};
 
+        // start on an empty tile in the middle
         Tile startingTile(1, {0, 0});
         tiles.push_back(startingTile);
         occupiedPositions.push_back(startingTile.position);
@@ -60,6 +62,7 @@ public:
         std::vector<Tile> previousTiles = {startingTile};
         std::vector<Tile> currentTiles = {};
 
+        //repeatedly generate tiles in adjacent positions
         bool isStillGenerating = true;
         while(isStillGenerating) {
             currentTiles = {};
