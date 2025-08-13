@@ -113,4 +113,10 @@ public:
             tiles.insert(tiles.end(), currentTiles);
         }
     }
+
+    void Draw() {
+        for(const Tile& i : tiles) {
+            i.Draw()
+        }
+    }
 };
