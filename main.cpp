@@ -24,8 +24,8 @@ int main()
     Texture2D playerDown = LoadTexture("resources/knight.png"); 
     Texture2D playerRight = LoadTexture("resources/right_looking_knight.png"); 
     Texture2D playerLeft = LoadTexture("resources/left_looking_knight.png"); 
-    Texture2D playerWalk[4];
-    for (int i = 0; i < 4; i++){
+    Texture2D playerWalk[8];
+    for (int i = 0; i < 8; i++){
         buffer = "resources/walk_" + std::to_string(i) + ".png";
         playerWalk[i] = LoadTexture(buffer.c_str());
     }
@@ -37,7 +37,7 @@ int main()
     Bar bar(10);
     std::vector <Enemy> enemy;
 
-    for(int i = 0; i < 50; i++){
+    for(int i = 0; i < 4; i++){
         enemy.push_back(Enemy( {float(randint(-900,900)),float(randint(-900,900))}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 50.0, randint(0,1),30));
     }
 
@@ -77,11 +77,11 @@ int main()
                 playerDir = down;
                 player.rotation = 0.f;
                 if (player.frame < 15 ){
-                    //player.changeImage(playerWalk[]);
+                    player.changeImage(playerWalk[6]);
                 }else if (player.frame < 30 ){
                     player.changeImage(playerUp);
                 }else if (player.frame < 45 ){
-                    //player.changeImage(playerWalk[]);
+                    player.changeImage(playerWalk[7]);
                 }else if (player.frame < 60 ){
                     player.changeImage(playerUp);
                 }
@@ -93,11 +93,11 @@ int main()
                 playerDir = up;
                 player.rotation = 180.f;
                 if (player.frame < 15 ){
-                    //player.changeImage(playerWalk[]);
+                    player.changeImage(playerWalk[4]);
                 }else if (player.frame < 30 ){
                     player.changeImage(playerDown);
                 }else if (player.frame < 45 ){
-                    //player.changeImage(playerWalk[]);
+                    player.changeImage(playerWalk[5]);
                 }else if (player.frame < 60 ){
                     player.changeImage(playerDown);
                 }
@@ -185,7 +185,7 @@ int main()
 
                 if (enemy[i].cooldown > 0){enemy[i].cooldown--;}
                 if (enemy[i].cooldown == -1 && enemy[i].type == 1){
-                    projectile.push_back(Projectile(LoadTexture("resources/mid_flame.png"),enemy[i].damage/5.f,enemy[i].position,GetAngleBetweenPoints(enemy[i].position,player.position),10,120,1));
+                    projectile.push_back(Projectile(LoadTexture("resources/mid_flame.png"),enemy[i].damage/5.f,enemy[i].position,GetAngleBetweenPoints(enemy[i].position,player.position),10,60,1));
                     enemy[i].cooldown = 600;
                 }if (enemy[i].cooldown == -1 && enemy[i].type == 0){
                     player.health -= enemy[i].damage;
@@ -221,7 +221,7 @@ int main()
                     if (projectile[i].ttl > 0){ projectile[i].ttl = 0;}
                     if (projectile[i].ttl % 10 == 0) {
                         player.health-=projectile[i].damage;
-                        player.position += {20 * cos(GetAngleBetweenPoints(enemy[i].position,player.position)),20 * sin(GetAngleBetweenPoints(enemy[i].position,player.position))};
+                        player.position += {20 * cos(GetAngleBetweenPoints(projectile[i].position,player.position)),20 * sin(GetAngleBetweenPoints(projectile[i].position,player.position))};
                     }
                 }
 
