@@ -14,6 +14,9 @@ public:
     }
 
     void Draw(Vector2 playerPos) {
-        DrawTextureEx(tileImage, {float(GetScreenWidth() / 2.f - 16 * 4) + (position.x * (32*4) - playerPos.x), float(GetScreenHeight() / 2.f - 16 * 4) + (position.y * (32*4) - playerPos.y)}, 0.f, 4.f, WHITE);
+        DrawTextureEx(tileImage, {
+            float(GetScreenWidth() / 2.f - 16 * 4) + (position.x * (32*4) - playerPos.x), 
+            float(GetScreenHeight() / 2.f - 16 * 4) + (position.y * (32*4) - playerPos.y)
+        }, 0.f, 4.f, WHITE);
     }
 };
