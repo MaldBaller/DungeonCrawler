@@ -48,7 +48,23 @@ public:
                 left = i.tileNumber;
             }
         }
-        // create one that fits all
+        
+        // actually pick a tile!
+        std::vector<int> validTiles = {};
+
+        int valid = 0;
+
+        //find which tiles are valid in that position
+        for(int i = 1; i <= 14; i++) {
+            for(const std::vector<int>[2]& j : lrConnections) {
+                if(std::find(j[0].begin(), j[0].end(), left) != j[0].end() && std::find(j[1].begin(), j[1].end(), i) != j[1].end()) {valid += 1}
+                if(std::find(j[0].begin(), j[0].end(), i) != j[0].end() && std::find(j[1].begin(), j[1].end(), right) != j[1].end()) {valid += 1}
+            }
+            for(const std::vector<int>[2]& j : lrConnections) {
+                if(std::find(j[0].begin(), j[0].end(), above) != j[0].end() && std::find(j[1].begin(), j[1].end(), i) != j[1].end()) {valid += 1}
+                if(std::find(j[0].begin(), j[0].end(), i) != j[0].end() && std::find(j[1].begin(), j[1].end(), below) != j[1].end()) {valid += 1}
+            }
+        }
     }
 
     void Generate() {
