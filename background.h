@@ -140,6 +140,7 @@ public:
     void Draw(Vector2 playerPos) {
         for(Tile& i : tiles) {
             if(i.tileNumber != 14 && sqrt(pow(i.position.x * 32*4 - playerPos.x, 2) + pow(i.position.y * 32*4 - playerPos.y, 2)) < 1000) {
+            // if(i.tileNumber != 14 && abs(i.position.x * 32*4 - playerPos.x) < 900 && abs(i.position.y * 32*4 - playerPos.y) < 600) {
                 i.Draw(playerPos, loadedTextures);
             }
         }
