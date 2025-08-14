@@ -31,11 +31,15 @@ public:
     int level;
     int height;
     int width;
+    Texture2D loadedTextures[15];
 
     Background(int lvl, int hei, int wid) {
         level = lvl;
         height = hei;
         width = wid;
+        for(int i = 0; i < 15; i++) {
+            loadedTextures[i] = LoadTexture(textureList[i]);
+        }
     }
 
     Tile CreateValidTile(Vector2 position, std::vector<Tile> previousTiles) {
@@ -136,7 +140,7 @@ public:
     void Draw(Vector2 playerPos) {
         for(Tile& i : tiles) {
             if(i.tileNumber != 14 && sqrt(pow(i.position.x * 32*4 - playerPos.x, 2) + pow(i.position.y * 32*4 - playerPos.y, 2)) < 1000) {
-                i.Draw(playerPos);
+                i.Draw(playerPos, loadedTextures);
             }
         }
     }
