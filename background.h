@@ -134,7 +134,9 @@ public:
 
     void Draw(Vector2 playerPos) {
         for(Tile& i : tiles) {
-            i.Draw(playerPos);
+            if(i.tileNumber != 14) {
+                i.Draw(playerPos);
+            }
         }
     }
 };
