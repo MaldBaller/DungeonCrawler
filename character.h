@@ -29,6 +29,8 @@ public:
         hitbox = hit;
         playerImage = texture;
         speed = 2.0f;
+        hitbox.x = position.x;
+        hitbox.y = position.y;
         
     }
 
