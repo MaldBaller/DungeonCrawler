@@ -46,7 +46,7 @@ public:
         const Vector2 positionChanges[4] = {{0, stepDistance}, {0, -stepDistance}, {stepDistance, 0}, {-stepDistance, 0}};
 
         Vector2 moveToMake = {0, 0};
-        for(int i; i < 4; i++) {
+        for(int i = 0; i < 4; i++) {
             // iterates through possible moves to find the best one
             if(FindDistance( Vector2Add(position, positionChanges[i]) , playerPosition) < FindDistance( Vector2Add(position, moveToMake) , playerPosition)){
                 moveToMake = positionChanges[i];
@@ -73,6 +73,6 @@ public:
 
     void Draw(Vector2 playerPos) {
         DrawTextureEx(playerImage, {float(GetScreenWidth() / 2.f - 16 * 4) + (position.x - playerPos.x), float(GetScreenHeight() / 2.f - 16 * 4) + (position.y - playerPos.y)}, 0.f, 4.f, WHITE);
-        DrawRectangleLines(float(GetScreenWidth() / 2.f - 16 * 4) + (hitbox.x - playerPos.x), float(GetScreenHeight() / 2.f - 16 * 4) + (hitbox.y - playerPos.y),hitbox.width,hitbox.height,BLUE);
+        //DrawRectangleLines(float(GetScreenWidth() / 2.f - 16 * 4) + (hitbox.x - playerPos.x), float(GetScreenHeight() / 2.f - 16 * 4) + (hitbox.y - playerPos.y),hitbox.width,hitbox.height,BLUE);
     }
 };

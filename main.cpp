@@ -8,6 +8,7 @@
 #include "sword.h"
 #include "health.h"
 #include <chrono>
+#include "score.h"
 
 int randint(int min, int max) {
 	return (rand() + rand()) % (max + 1 - min) + min;
@@ -18,10 +19,15 @@ using namespace std::chrono;
 int main()
 {
     srand(time(NULL));
-    InitWindow(1200, 1000, "DungeonCrawler");
+    InitWindow(1600, 1000, "DungeonCrawler");
+    //ToggleFullscreen();
+    InitAudioDevice();
+    //WriteScore(15);
 
     std::string buffer;
 
+
+    Texture2D back = LoadTexture("resources/title.png");
     Texture2D playerUp = LoadTexture("resources/knight_back.png"); 
     Texture2D playerDown = LoadTexture("resources/knight.png"); 
     Texture2D playerRight = LoadTexture("resources/right_looking_knight.png"); 
@@ -39,26 +45,30 @@ int main()
     Bar bar(10);
     std::vector <Enemy> enemy;
 
+    Sound sound[10];
+    for (int i = 0; i < 2;i++){
+        buffer = "resources/sound_" + std::to_string(i) + ".wav";
+        sound[i] = LoadSound(buffer.c_str());
+    }
+
     auto timeStart = steady_clock::now();
     auto time = steady_clock::now();
     int yellowTime = 0;
     bool toggle = false;
     //int seconds
 
-    for(int i = 0; i < 4; i++){
-        enemy.push_back(Enemy( {float(randint(-900,900)),float(randint(-900,900))}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 50.0, randint(0,1),30));
-    }
 
     int enemiesKilled = 0;
     int damageDelt = 0; 
     int score = 0;
+    int highScore = ReadScore();
 
 
     int screenX = GetScreenWidth();
     int screenY = GetScreenHeight();
     
     
-    int gamemode = 1;
+    int gamemode = -1;
     SetTargetFPS(120);
 
     typedef enum{
@@ -74,9 +84,9 @@ int main()
         //std::cout << screenX << "<screen width";
 
         if (IsKeyPressed(KEY_F11)) {
-            ToggleFullscreen();
-            screenX = GetScreenWidth();
-            screenY = GetScreenHeight();
+            //ToggleFullscreen();
+            //screenX = GetScreenWidth();
+            //screenY = GetScreenHeight();
         }
 
         time = steady_clock::now();
@@ -164,7 +174,7 @@ int main()
         
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
                 if (weapon == 0){
-                    if (sword.cooldownFrame == 0) { sword.cooldownFrame = -1;}
+                    if (sword.cooldownFrame == 0) { sword.cooldownFrame = -1; PlaySound(sound[0]);}
                 }else{
 
                 }
@@ -207,7 +217,9 @@ int main()
                         
                         if ((player.rotation == 0.f && player.position.y > enemy[i].position.y) || (player.rotation == 180 && player.position.y < enemy[i].position.y) || (player.rotation == 90 && player.position.x < enemy[i].position.x) || (player.rotation == 270 && player.position.x > enemy[i].position.x)){
                             enemy[i].health -= sword.damage;
+                            score += sword.damage;
                             damageDelt += sword.damage;
+                            PlaySound(sound[1]);
                             enemy[i].Move(10 * cos(GetAngleBetweenPoints(player.position,enemy[i].position)),10 * sin(GetAngleBetweenPoints(player.position,enemy[i].position)));
                         }
                     }
@@ -226,7 +238,7 @@ int main()
                 if (enemy[i].health < 0){
                     enemy.erase(enemy.begin() + i);
                     enemiesKilled++;
-                    score += 100;
+                    score += 200;
                     yellowTime = 120;
                 }else{
                     enemy.at(i).Draw(player.position);
@@ -291,19 +303,28 @@ int main()
                 yellowTime--;
             }
 
+            buffer = "High Score: " + std::to_string(highScore);
+            DrawTextEx(GetFontDefault(),buffer.c_str(),{float(screenX) - 400,0},50,3,YELLOW);
+
 
 
         }
         
 
         if (gamemode == 2){
-            DrawTextEx(GetFontDefault(),"You Died...",{screenX / 2.f - 100,screenY / 3.f},80,3,RED);
+            DrawTextEx(GetFontDefault(),"You Died...",{screenX / 2.f - 100,screenY / 2.f - 250},80,3,RED);
             buffer = "Mosters Killed: " + std::to_string(enemiesKilled);
-            DrawTextEx(GetFontDefault(),buffer.c_str() ,{screenX / 2.f - 100,screenY / 2.f},50,3,WHITE);
+            DrawTextEx(GetFontDefault(),buffer.c_str() ,{screenX / 2.f - 100,screenY / 2.f - 100},50,3,WHITE);
             buffer = "Damage Dealt: " + std::to_string(damageDelt);
-            DrawTextEx(GetFontDefault(),buffer.c_str(),{screenX / 2.f - 100,screenY / 2.f + 100},50,3,WHITE);
+            DrawTextEx(GetFontDefault(),buffer.c_str(),{screenX / 2.f - 100,screenY / 2.f },50,3,WHITE);
             buffer = "Final Score: " + std::to_string(score);
-            DrawTextEx(GetFontDefault(),buffer.c_str(),{screenX / 2.f - 100,screenY / 2.f + 200},60,3,YELLOW);
+            DrawTextEx(GetFontDefault(),buffer.c_str(),{screenX / 2.f - 100,screenY / 2.f + 100},60,3,YELLOW);
+            if (score < highScore){
+                buffer = "High Score: " + std::to_string(highScore);
+                DrawTextEx(GetFontDefault(),buffer.c_str(),{screenX / 2.f - 100,screenY / 2.f + 200},60,3,YELLOW);
+            }else{
+                DrawTextEx(GetFontDefault(),"New High Score!",{screenX / 2.f - 100,screenY / 2.f + 200},60,3,YELLOW);
+            }
 
             if (time - timeStart >= seconds{ 1 }) {
                 timeStart = time;
@@ -319,7 +340,37 @@ int main()
 
         if (gamemode == -1){
             gamemode = 0;
+            enemy.clear();
+            projectile.clear();
+            enemiesKilled = 0;
+            damageDelt = 0;
             
+            for(int i = 0; i < 10; i++){
+                enemy.push_back(Enemy( {float(randint(-900,900)),float(randint(-900,900))}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 50.0, randint(0,1),30));
+            }
+            player = Player({0, 0}, {0,0,32*4,32*4}, playerUp,100);
+            if (score > highScore){
+                WriteScore(score);  
+                highScore = score;
+            }score = 0;
+            toggle = false;
+            timeStart = steady_clock::now();
+        }
+
+        if (gamemode == 0){
+            DrawTexturePro(back,{0,0,172,99},{0,0,1600,1000},{0,0},0.f,WHITE);
+
+            buffer = std::to_string(highScore);
+            DrawTextEx(GetFontDefault(),buffer.c_str(),{float(screenX) - 260,130},40,3,BLACK);
+            DrawTextEx(GetFontDefault(),"High Score:",{float(screenX) - 270,90},30,3,BLACK);
+
+            if (time - timeStart >= seconds{ 2 }) {
+                timeStart = time;
+                toggle = true;
+            }
+            if (IsKeyDown(KEY_SPACE) && toggle){
+                gamemode = 1;
+            }
         }
 
         EndDrawing();
@@ -328,6 +379,7 @@ int main()
     //UnloadTexture(playerUp);
     enemy.clear();
     projectile.clear();
+    CloseAudioDevice();
     CloseWindow();
 
     return 0;
