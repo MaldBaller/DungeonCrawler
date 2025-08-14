@@ -1,6 +1,7 @@
 // background.h
 #pragma once
 #include "tile.h"
+#include "raymath.h"
 #include <vector>
 #include <algorithm>
 #include <cstdlib>
@@ -134,7 +135,7 @@ public:
 
     void Draw(Vector2 playerPos) {
         for(Tile& i : tiles) {
-            if(i.tileNumber != 14) {
+            if(i.tileNumber != 14 && sqrt(pow(i.position.x * 32*4 - playerPos.x, 2) + pow(i.position.y * 32*4 - playerPos.y, 2)) < 1000) {
                 i.Draw(playerPos);
             }
         }
