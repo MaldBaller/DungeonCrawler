@@ -103,24 +103,25 @@ public:
             for(const Tile& i : previousTiles) {
                 if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x, i.position.y-1}) == occupiedPositions.end() && i.position.y-1 >= -(height/2)) {
                     currentTiles.push_back(CreateValidTile(Vector2{i.position.x, i.position.y-1}, previousTiles));
+                    occupiedPositions.push_back(currentTiles.back().position);
                 } 
                 if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x+1, i.position.y}) == occupiedPositions.end() && i.position.x+1 < (width/2.0)) {
                     currentTiles.push_back(CreateValidTile(Vector2{i.position.x+1, i.position.y}, previousTiles));
+                    occupiedPositions.push_back(currentTiles.back().position);
                 } 
                 if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x, i.position.y+1}) == occupiedPositions.end() && i.position.y+1 < (height/2.0)) {
                     currentTiles.push_back(CreateValidTile(Vector2{i.position.x, i.position.y+1}, previousTiles));
+                    occupiedPositions.push_back(currentTiles.back().position);
                 } 
                 if(std::find(occupiedPositions.begin(), occupiedPositions.end(), Vector2{i.position.x-1, i.position.y}) == occupiedPositions.end() && i.position.x-1 >= -(width/2)) {
                     currentTiles.push_back(CreateValidTile(Vector2{i.position.x-1, i.position.y}, previousTiles));
+                    occupiedPositions.push_back(currentTiles.back().position);
                 }
             }
 
             if(currentTiles.size() == 0) {break;}
             tiles.insert(tiles.end(), currentTiles.begin(), currentTiles.end());
             previousTiles = currentTiles;
-            for(const Tile& i : currentTiles) {
-                occupiedPositions.push_back(i.position);
-            }
         }
     }
 
