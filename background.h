@@ -80,6 +80,10 @@ public:
         }
 
         // pick a random one
+        if(std::find(validTiles.begin(), validTiles.end(), 1) != validTiles.end()) {
+            validTiles.push_back(1);
+            validTiles.push_back(1);
+        }
         Tile finalTile(validTiles[std::rand() % validTiles.size()], position);
         return(finalTile);
     }
