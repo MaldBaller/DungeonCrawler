@@ -19,41 +19,62 @@ float FindDistance(Vector2 position1, Vector2 position2) {
 
 class Enemy : public Character {
 public:
+    Texture2D sheet[4];
+   
     int type; // 0 is melee 1 is range
-    int cooldown = 0;
+    int cooldown = 360;
     int damage;
-    Enemy(Vector2 pos, Rectangle hit, Texture2D tex, float hp, int typ, int dmg)
+    int move = 0;
+    int soundCooldown = 0;
+    Enemy(Vector2 pos, Rectangle hit, Texture2D tex, float hp, int typ, int dmg,float spd)
     : Character(pos, hit, tex)
     {
         health = hp;
         maxHealth = hp;
         type = typ;
         damage = dmg;
+        speed = spd;
+        std::string buffer;
+        
+        for (int i = 0; i < 4; i++){
+            if (type == 1) {
+                buffer = "resources/wizard_" + std::to_string(i) + ".png";
+            }
+            else {
+                buffer = "resources/slime_" + std::to_string(i) + ".png";
+            }
+            sheet[i] = LoadTexture(buffer.c_str());
+        }
     }
     
     // void Draw() {
     //     DrawTexture(texture, position.x, position.y, WHITE);
     // }
     
-    void Move(int deltaX, int deltaY) {
+    void Move(float deltaX, float deltaY) {
         SetPosition({position.x + deltaX, position.y + deltaY});
         hitbox.x = position.x;
         hitbox.y = position.y;
     }
 
     void FollowPlayer(Vector2 playerPosition) {
-        const int stepDistance = 1;
-        const Vector2 positionChanges[4] = {{0, stepDistance}, {0, -stepDistance}, {stepDistance, 0}, {-stepDistance, 0}};
+        //const int stepDistance = speed;
+        //speed *= 10;
+        const Vector2 positionChanges[4] = {{0, speed * 10}, {0, -speed * 10}, {speed * 10, 0}, {-speed * 10, 0}};
+        if (soundCooldown > 0) { soundCooldown--;}
+        if (move > 0) { move--;}
 
         Vector2 moveToMake = {0, 0};
         for(int i = 0; i < 4; i++) {
             // iterates through possible moves to find the best one
             if(FindDistance( Vector2Add(position, positionChanges[i]) , playerPosition) < FindDistance( Vector2Add(position, moveToMake) , playerPosition)){
                 moveToMake = positionChanges[i];
+                playerImage = sheet[i];
+
             }
         }
         if (FindDistance(playerPosition,position) > 450 || type != 1){
-            Move(moveToMake.x, moveToMake.y);
+            Move(moveToMake.x / 10.f, moveToMake.y / 10.f);
             if (type == 0 && FindDistance(playerPosition,position) < 90 && cooldown == 0){
                 cooldown = -1;
             }

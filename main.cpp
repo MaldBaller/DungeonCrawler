@@ -14,6 +14,13 @@ int randint(int min, int max) {
 	return (rand() + rand()) % (max + 1 - min) + min;
 }
 
+int posneg(){
+    if (randint(0,1)){
+        return 1;
+    }
+    return -1;
+}
+
 using namespace std::chrono;
 
 int main()
@@ -44,9 +51,10 @@ int main()
     int weapon = 0; //0 is sword 1 is mage
     Bar bar(10);
     std::vector <Enemy> enemy;
+    
 
     Sound sound[10];
-    for (int i = 0; i < 2;i++){
+    for (int i = 0; i < 6;i++){
         buffer = "resources/sound_" + std::to_string(i) + ".wav";
         sound[i] = LoadSound(buffer.c_str());
     }
@@ -62,6 +70,8 @@ int main()
     int damageDelt = 0; 
     int score = 0;
     int highScore = ReadScore();
+    int wave = 0;
+    int waveDisplay = 0;
 
 
     int screenX = GetScreenWidth();
@@ -99,6 +109,9 @@ int main()
                 score += 10;
             }
 
+            if (IsKeyPressed(KEY_TAB)){
+                gamemode = 3;
+            }
 
             //player.changeImage(playerDown);
             player.isWalking = false;
@@ -187,9 +200,27 @@ int main()
                 gamemode  = 2;
                 enemy.clear();
                 projectile.clear();
+                PlaySound(sound[2]);
             }
             
+            if (enemy.size() == 0){
+                waveDisplay = 240;
+                wave++;
+                PlaySound(sound[5]);
+
+                for(int i = 0; i < 3 * (wave / 3 + 1); i++){
+                    if (randint(0,2) == 0){
+                        enemy.push_back(Enemy( {float(randint(900,500) * posneg()),float(randint(900,500) * posneg())}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 50.0, 1,30,1.2));
+                    }
+                    else{
+                        enemy.push_back(Enemy( {float(randint(900,500) * posneg()),float(randint(900,500) * posneg())}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 100.0, 0,30,1.5));
+                    }
+                } 
+            }
         }
+
+        
+
 
         BeginDrawing();
         ClearBackground(BLACK);
@@ -219,7 +250,7 @@ int main()
                             enemy[i].health -= sword.damage;
                             score += sword.damage;
                             damageDelt += sword.damage;
-                            PlaySound(sound[1]);
+                            if (enemy[i].soundCooldown == 0) {PlaySound(sound[1]); enemy[i].soundCooldown = 91;}
                             enemy[i].Move(10 * cos(GetAngleBetweenPoints(player.position,enemy[i].position)),10 * sin(GetAngleBetweenPoints(player.position,enemy[i].position)));
                         }
                     }
@@ -227,12 +258,15 @@ int main()
 
                 if (enemy[i].cooldown > 0){enemy[i].cooldown--;}
                 if (enemy[i].cooldown == -1 && enemy[i].type == 1){
-                    projectile.push_back(Projectile(LoadTexture("resources/mid_flame.png"),enemy[i].damage,enemy[i].position,GetAngleBetweenPoints(enemy[i].position,player.position),10,60,1));
+                    projectile.push_back(Projectile(LoadTexture("resources/mid_flame.png"),enemy[i].damage,enemy[i].position,GetAngleBetweenPoints(enemy[i].position,player.position),8,80,1));
                     enemy[i].cooldown = 600;
                 }if (enemy[i].cooldown == -1 && enemy[i].type == 0){
                     player.health -= enemy[i].damage;
-                    player.position += {20 * cos(GetAngleBetweenPoints(enemy[i].position,player.position)),20 * sin(GetAngleBetweenPoints(enemy[i].position,player.position))};
                     enemy[i].cooldown = 60;
+                    enemy[i].move = 10;
+                    PlaySound(sound[4]);
+                }if (enemy[i].type == 0 && enemy[i].move > 0){
+                    player.position += {4 * cos(GetAngleBetweenPoints(enemy[i].position,player.position)),4 * sin(GetAngleBetweenPoints(enemy[i].position,player.position))};
                 }
 
                 if (enemy[i].health < 0){
@@ -270,7 +304,7 @@ int main()
                     }
                 }
 
-
+                if (projectile[i].ttl == 0){ PlaySound(sound[3]); }
                 projectile[i].Draw(player.position);
                 //DrawRectangleLines(float(GetScreenWidth() / 2.f) + (projectile[i].position.x - player.position.x), float(GetScreenHeight() / 2.f) + (projectile[i].position.y - player.position.y),50,50,RED);
 
@@ -304,32 +338,43 @@ int main()
             }
 
             buffer = "High Score: " + std::to_string(highScore);
-            DrawTextEx(GetFontDefault(),buffer.c_str(),{float(screenX) - 400,0},50,3,YELLOW);
-
-
-
+            DrawText(buffer.c_str(), screenX - MeasureText(buffer.c_str(),50),0,50,YELLOW);
+            buffer = "Wave: " + std::to_string(wave);
+            DrawText(buffer.c_str(), screenX / 2.f - MeasureText(buffer.c_str(),50) / 2.f,0,50,RED);
+            
+            if (waveDisplay > 0){
+                waveDisplay--;
+                buffer = "Wave: " + std::to_string(wave);
+                DrawText(buffer.c_str(), screenX / 2.f - MeasureText(buffer.c_str(),200) / 2.f,screenY / 2.f,200,RED);
+            }
+            
         }
         
 
         if (gamemode == 2){
-            DrawTextEx(GetFontDefault(),"You Died...",{screenX / 2.f - 100,screenY / 2.f - 250},80,3,RED);
+            buffer = "You Died...";
+            DrawText(buffer.c_str(), screenX / 2.f - MeasureText(buffer.c_str(),80) / 2.f,screenY / 2.f - 250 ,80,RED);
             buffer = "Mosters Killed: " + std::to_string(enemiesKilled);
-            DrawTextEx(GetFontDefault(),buffer.c_str() ,{screenX / 2.f - 100,screenY / 2.f - 100},50,3,WHITE);
-            buffer = "Damage Dealt: " + std::to_string(damageDelt);
-            DrawTextEx(GetFontDefault(),buffer.c_str(),{screenX / 2.f - 100,screenY / 2.f },50,3,WHITE);
+            DrawText(buffer.c_str(), screenX / 2.f - MeasureText(buffer.c_str(),50) / 2.f,screenY / 2.f - 100,50,WHITE);
+            buffer = "Wave: " + std::to_string(wave);
+            DrawText(buffer.c_str(), screenX / 2.f - MeasureText(buffer.c_str(),50) / 2.f,screenY / 2.f ,50,WHITE);
             buffer = "Final Score: " + std::to_string(score);
-            DrawTextEx(GetFontDefault(),buffer.c_str(),{screenX / 2.f - 100,screenY / 2.f + 100},60,3,YELLOW);
+            DrawText(buffer.c_str(), screenX / 2.f - MeasureText(buffer.c_str(),60) / 2.f,screenY / 2.f + 100,60,YELLOW);
+
             if (score < highScore){
                 buffer = "High Score: " + std::to_string(highScore);
-                DrawTextEx(GetFontDefault(),buffer.c_str(),{screenX / 2.f - 100,screenY / 2.f + 200},60,3,YELLOW);
+                DrawText(buffer.c_str(), screenX / 2.f - MeasureText(buffer.c_str(),60) / 2.f,screenY / 2.f + 200,60,YELLOW);
             }else{
-                DrawTextEx(GetFontDefault(),"New High Score!",{screenX / 2.f - 100,screenY / 2.f + 200},60,3,YELLOW);
+                DrawText("New High Score!", screenX / 2.f - MeasureText("New High Score!",60) / 2.f,screenY / 2.f + 200,60,YELLOW);
             }
 
             if (time - timeStart >= seconds{ 1 }) {
                 timeStart = time;
                 toggle = !toggle;
-            }if (toggle){DrawTextEx(GetFontDefault(),"Press space to continue..",{screenX / 2.f - 100,screenY / 2.f + 350},50,3,WHITE);}
+            }if (toggle){
+                DrawText("Press space to continue..", screenX / 2.f - MeasureText("Press space to continue..",50) / 2.f,screenY / 2.f + 350,50,WHITE);
+                
+            }
 
             if (IsKeyDown(KEY_SPACE)){
                 gamemode = -1;
@@ -344,9 +389,11 @@ int main()
             projectile.clear();
             enemiesKilled = 0;
             damageDelt = 0;
+            wave = 0;
             
-            for(int i = 0; i < 10; i++){
-                enemy.push_back(Enemy( {float(randint(-900,900)),float(randint(-900,900))}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 50.0, randint(0,1),30));
+            for(int i = 0; i < 0; i++){
+                enemy.push_back(Enemy( {float(randint(-900,900)),float(randint(-900,900))}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 50.0, 1,30,1.f));
+                enemy.push_back(Enemy( {float(randint(-900,900)),float(randint(-900,900))}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 50.0, 0,30,1.5));
             }
             player = Player({0, 0}, {0,0,32*4,32*4}, playerUp,100);
             if (score > highScore){
@@ -364,11 +411,34 @@ int main()
             DrawTextEx(GetFontDefault(),buffer.c_str(),{float(screenX) - 260,130},40,3,BLACK);
             DrawTextEx(GetFontDefault(),"High Score:",{float(screenX) - 270,90},30,3,BLACK);
 
-            if (time - timeStart >= seconds{ 2 }) {
+            if (time - timeStart >= seconds{ 1 }) {
                 timeStart = time;
                 toggle = true;
             }
             if (IsKeyDown(KEY_SPACE) && toggle){
+                gamemode = 1;
+            }
+        }
+
+        if (gamemode == 3){
+            buffer = "Paused";
+            DrawText(buffer.c_str(), screenX / 2.f - MeasureText(buffer.c_str(),80) / 2.f,screenY / 2.f - 250 ,80,RED);
+            buffer = "Mosters Killed: " + std::to_string(enemiesKilled);
+            DrawText(buffer.c_str(), screenX / 2.f - MeasureText(buffer.c_str(),50) / 2.f,screenY / 2.f - 100,50,WHITE);
+            buffer = "Damage Dealt: " + std::to_string(damageDelt);
+            DrawText(buffer.c_str(), screenX / 2.f - MeasureText(buffer.c_str(),50) / 2.f,screenY / 2.f ,50,WHITE);
+            buffer = "Score: " + std::to_string(score);
+            DrawText(buffer.c_str(), screenX / 2.f - MeasureText(buffer.c_str(),60) / 2.f,screenY / 2.f + 100,60,YELLOW);
+
+            if (time - timeStart >= seconds{ 1 }) {
+                timeStart = time;
+                toggle = !toggle;
+            }if (toggle){
+                
+                DrawText("Press space to continue..", screenX / 2.f - MeasureText("Press space to continue..",50) / 2.f,screenY / 2.f + 350,50,WHITE);
+            }
+
+            if (IsKeyDown(KEY_SPACE)){
                 gamemode = 1;
             }
         }
