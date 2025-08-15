@@ -9,6 +9,7 @@
 #include "health.h"
 #include <chrono>
 #include "score.h"
+#include "background.h"
 
 int randint(int min, int max) {
 	return (rand() + rand()) % (max + 1 - min) + min;
@@ -51,6 +52,7 @@ int main()
     int weapon = 0; //0 is sword 1 is mage
     Bar bar(10);
     std::vector <Enemy> enemy;
+    Background bg(0, 50, 50);
     
 
     Sound sound[10];
@@ -180,6 +182,14 @@ int main()
 
                 player.isWalking = true;
             }
+            for(int i = 0; i < bg.tiles.size(); i++) {
+                if(CheckCollisionRecs(player.hitbox, bg.tiles[i].collider1) || CheckCollisionRecs(player.hitbox, bg.tiles[i].collider2)) {
+                    if(playerDir == up) {player.position.y += player.speed;}
+                    if(playerDir == down) {player.position.y -= player.speed;}
+                    if(playerDir == left) {player.position.x += player.speed;}
+                    if(playerDir == right) {player.position.x -= player.speed;}
+                }
+            }
             if (!player.isWalking) { player.frame = 0; player.changeImage(playerDown);} else { player.frame++; }
 
             player.hitbox.x = player.position.x;
@@ -225,6 +235,8 @@ int main()
         BeginDrawing();
         ClearBackground(BLACK);
         if (gamemode == 1){
+
+            bg.Draw(player.position);
 
             //Enemy draw
             for (int i = 0; i < enemy.size(); i++){
@@ -390,6 +402,8 @@ int main()
             enemiesKilled = 0;
             damageDelt = 0;
             wave = 0;
+            bg.tiles.clear();
+            bg.Generate();
             
             for(int i = 0; i < 0; i++){
                 enemy.push_back(Enemy( {float(randint(-900,900)),float(randint(-900,900))}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 50.0, 1,30,1.f));
