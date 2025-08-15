@@ -107,6 +107,7 @@ public:
     }
 
     void Generate() {
+        tiles.clear();
         std::srand(std::time({})); // use current time as seed for random generator
         std::vector<Vector2> occupiedPositions = {};
 
