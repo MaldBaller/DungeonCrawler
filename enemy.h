@@ -26,6 +26,7 @@ public:
     int damage;
     int move = 0;
     int soundCooldown = 0;
+    int direction = 0;
     Enemy(Vector2 pos, Rectangle hit, Texture2D tex, float hp, int typ, int dmg,float spd)
     : Character(pos, hit, tex)
     {
@@ -70,7 +71,7 @@ public:
             if(FindDistance( Vector2Add(position, positionChanges[i]) , playerPosition) < FindDistance( Vector2Add(position, moveToMake) , playerPosition)){
                 moveToMake = positionChanges[i];
                 playerImage = sheet[i];
-
+                direction = i;
             }
         }
         if (FindDistance(playerPosition,position) > 450 || type != 1){
