@@ -47,8 +47,26 @@ public:
             if (type == 1) {
                 buffer = "resources/wizard_" + std::to_string(i) + ".png";
             }
-            else {
+            else if (type == 0) {
                 buffer = "resources/slime_" + std::to_string(i) + ".png";
+            }
+            else if (type == 2) {
+                buffer = "resources/slime1_" + std::to_string(i) + ".png";
+            }
+            else if (type == 3) {
+                buffer = "resources/slime2_" + std::to_string(i) + ".png";
+            }
+            else if (type == 4) {
+                buffer = "resources/healer_" + std::to_string(i) + ".png";
+            }
+            else if (type == 5) {
+                buffer = "resources/summon_" + std::to_string(i) + ".png";
+            }
+            else if (type == 6) {
+                buffer = "resources/slime3_" + std::to_string(i) + ".png";
+            }
+            else if (type == 7) {
+                buffer = "resources/slime4_" + std::to_string(i) + ".png";
             }
             sheet[i] = LoadTexture(buffer.c_str());
         }
@@ -88,9 +106,9 @@ public:
                 direction = i;
             }
         }
-        if (FindDistance(playerPosition,position) > 450 || type != 1){
+        if (FindDistance(playerPosition,position) > 450 || (type != 1 && type != 4 && type != 5)) {
             Move(moveToMake.x / 10.f, moveToMake.y / 10.f);
-            if (type == 0 && FindDistance(playerPosition,position) < 90 && cooldown == 0){
+            if ((type == 0 || type == 2 || type == 3|| type == 6 || type == 7) && FindDistance(playerPosition,position) < 90 && cooldown == 0){
                 cooldown = -1;
             }
 
@@ -109,6 +127,8 @@ public:
 
     void Draw(Vector2 playerPos) {
         DrawTextureEx(playerImage, {float(GetScreenWidth() / 2.f - 16 * 4) + (position.x - playerPos.x), float(GetScreenHeight() / 2.f - 16 * 4) + (position.y - playerPos.y)}, 0.f, 4.f, WHITE);
-        //DrawRectangleLines(float(GetScreenWidth() / 2.f - 16 * 4) + (hitbox.x - playerPos.x), float(GetScreenHeight() / 2.f - 16 * 4) + (hitbox.y - playerPos.y),hitbox.width,hitbox.height,BLUE);
+        /*if (cooldown == 0){
+            //DrawRectangleLines(float(GetScreenWidth() / 2.f - 16 * 4) + (hitbox.x - playerPos.x), float(GetScreenHeight() / 2.f - 16 * 4) + (hitbox.y - playerPos.y),hitbox.width,hitbox.height,BLUE);
+        }*/
     }
 };

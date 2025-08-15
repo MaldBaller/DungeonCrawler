@@ -33,10 +33,28 @@ public:
     int width;
     Texture2D loadedTextures[15];
 
+    
     Background(int lvl, int hei, int wid) {
         level = lvl;
         height = hei;
         width = wid;
+        const char * textureList[15] {
+            "resources/missingtexture.png",
+            "resources/dirt_floor.png",
+            "resources/right_wall.png",
+            "resources/bottom_wall.png",
+            "resources/left_wall.png",
+            "resources/top_wall.png",
+            "resources/top_right_corner_wall.png",
+            "resources/bottom_right_corner_wall.png",
+            "resources/bottom_left_corner_wall.png",
+            "resources/top_left_corner_wall.png",
+            "resources/top_right_square.png",
+            "resources/bottom_right_square.png",
+            "resources/bottom_left_square.png",
+            "resources/top_left_square.png",
+            "resources/tile_14.png"
+}       ;
         for(int i = 0; i < 15; i++) {
             loadedTextures[i] = LoadTexture(textureList[i]);
         }
@@ -44,6 +62,7 @@ public:
 
     Tile CreateValidTile(Vector2 position, std::vector<Tile> &previousTiles) {
         // find any adjacent tiles (0 means no tile)
+        //tiles.clear();
         int above=0, right=0, below=0, left=0;
 
         for(const Tile& i : previousTiles) {
@@ -107,6 +126,7 @@ public:
     }
 
     void Generate() {
+
         tiles.clear();
         std::srand(std::time({})); // use current time as seed for random generator
         std::vector<Vector2> occupiedPositions = {};
@@ -118,6 +138,8 @@ public:
 
         std::vector<Tile> previousTiles = {startingTile};
         std::vector<Tile> currentTiles = {};
+
+        
 
         //repeatedly generate tiles in adjacent positions
         bool isStillGenerating = true;
