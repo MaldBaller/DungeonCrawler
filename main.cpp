@@ -242,6 +242,14 @@ int main()
             for (int i = 0; i < enemy.size(); i++){
 
                 enemy.at(i).FollowPlayer(player.position);
+                for(int j = 0; j < bg.tiles.size(); j++) {
+                    if(CheckCollisionRecs(enemy[i].hitbox, bg.tiles[j].collider1) || CheckCollisionRecs(enemy[i].hitbox, bg.tiles[j].collider2)) {
+                        if(enemy[i].direction == 0) {enemy[i].Move(0, -enemy[i].speed);}
+                        if(enemy[i].direction == 1) {enemy[i].Move(0, enemy[i].speed);}
+                        if(enemy[i].direction == 2) {enemy[i].Move(-enemy[i].speed, 0);}
+                        if(enemy[i].direction == 3) {enemy[i].Move(enemy[i].speed, 0);}
+                    }
+                }
                 
 
                 if (FindDistance(enemy.at(i).position, player.position) < 50){
