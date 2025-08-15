@@ -118,7 +118,7 @@ int main()
             if (player.frame > player.maxFrame) { player.frame = 0;}
             if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)){
                 player.position.y -= player.speed;
-                playerDir = down;
+                playerDir = up;
                 player.rotation = 0.f;
                 if (player.frame < 15 ){
                     player.changeImage(playerWalk[6]);
@@ -134,7 +134,7 @@ int main()
             }
             if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN)){
                 player.position.y += player.speed;
-                playerDir = up;
+                playerDir = down;
                 player.rotation = 180.f;
                 if (player.frame < 15 ){
                     player.changeImage(playerWalk[4]);
