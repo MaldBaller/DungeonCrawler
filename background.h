@@ -83,7 +83,22 @@ public:
         if(std::find(validTiles.begin(), validTiles.end(), 1) != validTiles.end()) {
             validTiles.push_back(1);
             validTiles.push_back(1);
+            validTiles.push_back(1);
+        } else {
+            if(std::find(validTiles.begin(), validTiles.end(), 10) != validTiles.end()) {
+                validTiles.push_back(10);
+            }
+            if(std::find(validTiles.begin(), validTiles.end(), 11) != validTiles.end()) {
+                validTiles.push_back(11);
+            }
+            if(std::find(validTiles.begin(), validTiles.end(), 12) != validTiles.end()) {
+                validTiles.push_back(12);
+            }
+            if(std::find(validTiles.begin(), validTiles.end(), 13) != validTiles.end()) {
+                validTiles.push_back(13);
+            }
         }
+        
         Tile finalTile(validTiles[std::rand() % validTiles.size()], position);
         return(finalTile);
     }
