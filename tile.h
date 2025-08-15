@@ -24,10 +24,17 @@ class Tile {
 public:
     int tileNumber;
     Vector2 position;
+    Rectangle hitbox1;
+    Rectangle hitbox2;
 
     Tile(int num, Vector2 pos) {
         tileNumber = num;
         position = pos;
+        if(tileNumber == 2) {
+            hitbox1 = {position.x*32 + 24, position.y*32, 8.f, 32.f};
+            hitbox2 = {0,0,0,0};
+        }
+        // keep doing these!!!!
     }
 
     void Draw(Vector2 playerPos, Texture2D* loadedTextures) {
