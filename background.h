@@ -84,6 +84,9 @@ public:
             validTiles.push_back(1);
             validTiles.push_back(1);
             validTiles.push_back(1);
+            validTiles.push_back(1);
+            validTiles.push_back(1);
+            validTiles.push_back(1);
         } else {
             if(std::find(validTiles.begin(), validTiles.end(), 10) != validTiles.end()) {
                 validTiles.push_back(10);
