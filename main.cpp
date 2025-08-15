@@ -9,6 +9,7 @@
 #include "health.h"
 #include <chrono>
 #include "score.h"
+#include "background.h"
 
 int randint(int min, int max) {
 	return (rand() + rand()) % (max + 1 - min) + min;
@@ -32,9 +33,12 @@ int main()
     //WriteScore(15);
 
     std::string buffer;
+    int n = 0;
 
 
     Texture2D back = LoadTexture("resources/title.png");
+    Texture2D healAura = LoadTexture("resources/heal.png");
+    Texture2D summonAura = LoadTexture("resources/summon.png");
     Texture2D playerUp = LoadTexture("resources/knight_back.png"); 
     Texture2D playerDown = LoadTexture("resources/knight.png"); 
     Texture2D playerRight = LoadTexture("resources/right_looking_knight.png"); 
@@ -52,9 +56,10 @@ int main()
     Bar bar(10);
     std::vector <Enemy> enemy;
     
+    Background map(1,100,100);
 
     Sound sound[10];
-    for (int i = 0; i < 6;i++){
+    for (int i = 0; i < 8;i++){ //cgttt
         buffer = "resources/sound_" + std::to_string(i) + ".wav";
         sound[i] = LoadSound(buffer.c_str());
     }
@@ -194,7 +199,7 @@ int main()
             }
             
             if (player.health > 0){
-                player.health += 0.01;
+                player.health += 0.02;
                 if (player.health > player.maxHealth){ player.health = player.maxHealth; }
             }else {
                 gamemode  = 2;
@@ -208,12 +213,25 @@ int main()
                 wave++;
                 PlaySound(sound[5]);
 
-                for(int i = 0; i < 3 * (wave / 3 + 1); i++){
-                    if (randint(0,2) == 0){
-                        enemy.push_back(Enemy( {float(randint(900,500) * posneg()),float(randint(900,500) * posneg())}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 50.0, 1,30,1.2));
+                for(int i = 0; i < 3 * (wave / 2 + 1); i++){
+                    n = randint(0,11);
+                    if (n <= 1){
+                        enemy.push_back(Enemy( {float(randint(900,500) * posneg()),float(randint(900,500) * posneg())}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 55.f, 1,30,1.1));
                     }
-                    else{
-                        enemy.push_back(Enemy( {float(randint(900,500) * posneg()),float(randint(900,500) * posneg())}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 100.0, 0,30,1.5));
+                    else if (n <= 4) {
+                        enemy.push_back(Enemy( {float(randint(900,500) * posneg()),float(randint(900,500) * posneg())}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 100.f, 0,25,1.3));
+                    }
+                    else if (n <= 7) {
+                        enemy.push_back(Enemy( {float(randint(900,500) * posneg()),float(randint(900,500) * posneg())}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 60.f, 2,10,2.3));
+                    }
+                    else if (n <= 9) {
+                        enemy.push_back(Enemy( {float(randint(900,500) * posneg()),float(randint(900,500) * posneg())}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 180.f, 3,30,0.7));
+                    }
+                    else if (n <= 10) {
+                        enemy.push_back(Enemy( {float(randint(900,500) * posneg()),float(randint(900,500) * posneg())}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 50.f, 4,35,1.1));
+                    }
+                    else if (n <= 11) {
+                        enemy.push_back(Enemy( {float(randint(900,500) * posneg()),float(randint(900,500) * posneg())}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 80.f, 5,15,1.1));
                     }
                 } 
             }
@@ -226,6 +244,8 @@ int main()
         ClearBackground(BLACK);
         if (gamemode == 1){
 
+            map.Draw(player.position);
+
             //Enemy draw
             for (int i = 0; i < enemy.size(); i++){
 
@@ -235,11 +255,28 @@ int main()
                 if (FindDistance(enemy.at(i).position, player.position) < 50){
                     enemy.at(i).Move(enemy.at(i).speed * 1.1 * cos(GetAngleBetweenPoints(player.position,enemy.at(i).position)) , enemy.at(i).speed * 1.1 * sin(GetAngleBetweenPoints(player.position,enemy.at(i).position)) );
                 }
-                    
+
+                if (enemy[i].type == 4 && enemy[i].cooldown == -1){
+                    enemy[i].health += enemy[i].damage / 2;
+                    if (enemy[i].health > enemy[i].maxHealth){
+                        enemy[i].health = enemy[i].maxHealth;
+                    }
+                    PlaySound(sound[6]);
+                }
+                
+                
                 for (int j = 0; j < enemy.size(); j++){
                     if (j != i) {
                         if (FindDistance(enemy.at(i).position, enemy.at(j).position) < 50){
                             enemy.at(i).Move(enemy.at(i).speed * 1.1 * cos(GetAngleBetweenPoints(enemy.at(j).position,enemy.at(i).position)) , enemy.at(i).speed * 1.1 * sin(GetAngleBetweenPoints(enemy.at(j).position,enemy.at(i).position)) );
+                        }
+                        if (enemy[i].type == 4 && enemy[i].cooldown == -1){
+                            if (FindDistance(enemy.at(i).position, enemy.at(j).position) < 400){
+                                enemy[j].health += enemy[i].damage;
+                                if (enemy[j].health > enemy[j].maxHealth){
+                                    enemy[j].health = enemy[j].maxHealth;
+                                }
+                            }
                         }
                     }
                 }
@@ -257,16 +294,30 @@ int main()
                 }
 
                 if (enemy[i].cooldown > 0){enemy[i].cooldown--;}
-                if (enemy[i].cooldown == -1 && enemy[i].type == 1){
-                    projectile.push_back(Projectile(LoadTexture("resources/mid_flame.png"),enemy[i].damage,enemy[i].position,GetAngleBetweenPoints(enemy[i].position,player.position),8,80,1));
+                if (enemy[i].cooldown == -1 && (enemy[i].type == 1)){
+                    projectile.push_back(Projectile(LoadTexture("resources/mid_flame.png"),enemy[i].damage,enemy[i].position,GetAngleBetweenPoints(enemy[i].position,player.position),9,80,1));
                     enemy[i].cooldown = 600;
-                }if (enemy[i].cooldown == -1 && enemy[i].type == 0){
+                }if (enemy[i].cooldown == -1 && (enemy[i].type == 5)){
+                    if (randint(0,2) <= 1){
+                        projectile.push_back(Projectile(LoadTexture("resources/mid_flame.png"),enemy[i].damage,enemy[i].position,GetAngleBetweenPoints(enemy[i].position,player.position),9,80,1));
+                        enemy[i].cooldown = 500;
+                    }else{
+                        n = randint(1,3);
+                        for (int i = 0; i < n; i++) {
+                            enemy.push_back(Enemy( {enemy[i].position.x + (randint(50,100) * posneg()),enemy[i].position.y + float(randint(50,100) * posneg())}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 60.f, 6,10,1.6));
+                        }
+                        enemy[i].cooldown = 1200;
+                    }
+                    
+                }if (enemy[i].cooldown == -1 && (enemy[i].type == 0 || enemy[i].type == 2 || enemy[i].type == 3 || enemy[i].type == 6)){
                     player.health -= enemy[i].damage;
                     enemy[i].cooldown = 60;
                     enemy[i].move = 10;
                     PlaySound(sound[4]);
-                }if (enemy[i].type == 0 && enemy[i].move > 0){
+                }if ((enemy[i].type == 0 || enemy[i].type == 2 || enemy[i].type == 3 || enemy[i].type == 6) && enemy[i].move > 0){
                     player.position += {4 * cos(GetAngleBetweenPoints(enemy[i].position,player.position)),4 * sin(GetAngleBetweenPoints(enemy[i].position,player.position))};
+                }if (enemy[i].cooldown == -1 && enemy[i].type == 4){
+                    enemy[i].cooldown = 400;
                 }
 
                 if (enemy[i].health < 0){
@@ -275,7 +326,15 @@ int main()
                     score += 200;
                     yellowTime = 120;
                 }else{
+                    if(enemy[i].type == 4 && enemy[i].cooldown > 350){
+                        //DrawCircle(float(GetScreenWidth() / 2.f + (enemy[i].position.x - player.position.x)), float(GetScreenHeight() / 2.f + (enemy[i].position.y - player.position.y)),400,YELLOW);
+                        DrawTextureEx(healAura, {float(GetScreenWidth() / 2.f - 400) + (enemy[i].position.x - player.position.x), float(GetScreenHeight() / 2.f - 400) + (enemy[i].position.y - player.position.y)}, 0.f, 4.f, WHITE);
+                    }if(enemy[i].type == 5 && enemy[i].cooldown > 850){
+                        //DrawCircle(float(GetScreenWidth() / 2.f + (enemy[i].position.x - player.position.x)), float(GetScreenHeight() / 2.f + (enemy[i].position.y - player.position.y)),400,YELLOW);
+                        DrawTextureEx(summonAura, {float(GetScreenWidth() / 2.f - 200) + (enemy[i].position.x - player.position.x), float(GetScreenHeight() / 2.f - 200) + (enemy[i].position.y - player.position.y)}, 0.f, 4.f, WHITE);
+                    }
                     enemy.at(i).Draw(player.position);
+                    
                     bar.Draw({float(GetScreenWidth() / 2.f + (enemy[i].position.x - player.position.x)), float(GetScreenHeight() / 2.f + (enemy[i].position.y - player.position.y))},enemy[i].maxHealth,enemy[i].health);
                     //float(GetScreenWidth() / 2.f - 16 * 4) + (hitbox.x - playerPos.x)
                 }
@@ -390,11 +449,8 @@ int main()
             enemiesKilled = 0;
             damageDelt = 0;
             wave = 0;
-            
-            for(int i = 0; i < 0; i++){
-                enemy.push_back(Enemy( {float(randint(-900,900)),float(randint(-900,900))}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 50.0, 1,30,1.f));
-                enemy.push_back(Enemy( {float(randint(-900,900)),float(randint(-900,900))}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 50.0, 0,30,1.5));
-            }
+            map.Generate();
+           
             player = Player({0, 0}, {0,0,32*4,32*4}, playerUp,100);
             if (score > highScore){
                 WriteScore(score);  
