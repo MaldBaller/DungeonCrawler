@@ -30,7 +30,7 @@ public:
     Tile(int num, Vector2 pos) {
         tileNumber = num;
         position = pos;
-        if(tileNumber == 1) {
+        if(tileNumber == 1 || tileNumber == 14) {
             collider1 = {0,0,0,0};
             collider2 = {0,0,0,0};
         }
@@ -54,7 +54,34 @@ public:
             collider1 = {position.x*32, position.y*32, 32, 8};
             collider2 = {position.x*32 + 24, position.y*32, 8, 32};
         }
-        // keep doing these!!!!
+        if(tileNumber == 7) {
+            collider1 = {position.x*32 + 24, position.y*32, 32, 8};
+            collider2 = {position.x*32 + 24, position.y*32, 8, 32};
+        }
+        if(tileNumber == 8) {
+            collider1 = {position.x*32 + 24, position.y*32, 32, 8};
+            collider2 = {position.x*32, position.y*32, 8, 32};
+        }
+        if(tileNumber == 9) {
+            collider1 = {position.x*32, position.y*32, 32, 8};
+            collider2 = {position.x*32, position.y*32, 8, 32};
+        }
+        if(tileNumber == 10) {
+            collider1 = {position.x*32 + 24, position.y*32, 8, 8};
+            collider2 = {0,0,0,0};
+        }
+        if(tileNumber == 11) {
+            collider1 = {position.x*32 + 24, position.y*32 + 24, 8, 8};
+            collider2 = {0,0,0,0};
+        }
+        if(tileNumber == 12) {
+            collider1 = {position.x*32, position.y*32 + 24, 8, 8};
+            collider2 = {0,0,0,0};
+        }
+        if(tileNumber == 13) {
+            collider1 = {position.x*32, position.y*32, 8, 8};
+            collider2 = {0,0,0,0};
+        }
     }
 
     void Draw(Vector2 playerPos, Texture2D* loadedTextures) {
