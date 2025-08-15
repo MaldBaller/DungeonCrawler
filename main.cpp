@@ -37,6 +37,8 @@ int main()
 
 
     Texture2D back = LoadTexture("resources/title.png");
+    Texture2D pauseBack = LoadTexture("resources/pause_game.png");
+    Texture2D endBack = LoadTexture("resources/game_over.png");
     Texture2D healAura = LoadTexture("resources/heal.png");
     Texture2D summonAura = LoadTexture("resources/summon.png");
     Texture2D playerUp = LoadTexture("resources/knight_back.png"); 
@@ -214,7 +216,7 @@ int main()
                 PlaySound(sound[5]);
 
                 for(int i = 0; i < 3 * (wave / 2 + 1); i++){
-                    n = randint(0,11);
+                    n = randint(0,12);
                     if (n <= 1){
                         enemy.push_back(Enemy( {float(randint(900,500) * posneg()),float(randint(900,500) * posneg())}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 55.f, 1,30,1.1));
                     }
@@ -228,10 +230,13 @@ int main()
                         enemy.push_back(Enemy( {float(randint(900,500) * posneg()),float(randint(900,500) * posneg())}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 180.f, 3,30,0.7));
                     }
                     else if (n <= 10) {
-                        enemy.push_back(Enemy( {float(randint(900,500) * posneg()),float(randint(900,500) * posneg())}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 50.f, 4,35,1.1));
+                        enemy.push_back(Enemy( {float(randint(900,500) * posneg()),float(randint(900,500) * posneg())}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 50.f, 4,30,1.1));
                     }
                     else if (n <= 11) {
-                        enemy.push_back(Enemy( {float(randint(900,500) * posneg()),float(randint(900,500) * posneg())}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 80.f, 5,15,1.1));
+                        enemy.push_back(Enemy( {float(randint(900,500) * posneg()),float(randint(900,500) * posneg())}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 80.f, 5,20,1.1));
+                    }
+                    else if (n <= 12) {
+                        enemy.push_back(Enemy( {float(randint(900,500) * posneg()),float(randint(900,500) * posneg())}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 90.f, 7,15,1.2));
                     }
                 } 
             }
@@ -257,7 +262,7 @@ int main()
                 }
 
                 if (enemy[i].type == 4 && enemy[i].cooldown == -1){
-                    enemy[i].health += enemy[i].damage / 2;
+                    enemy[i].health += enemy[i].damage / 4;
                     if (enemy[i].health > enemy[i].maxHealth){
                         enemy[i].health = enemy[i].maxHealth;
                     }
@@ -300,27 +305,31 @@ int main()
                 }if (enemy[i].cooldown == -1 && (enemy[i].type == 5)){
                     if (randint(0,2) <= 1){
                         projectile.push_back(Projectile(LoadTexture("resources/mid_flame.png"),enemy[i].damage,enemy[i].position,GetAngleBetweenPoints(enemy[i].position,player.position),9,80,1));
-                        enemy[i].cooldown = 500;
+                        enemy[i].cooldown = 400;
                     }else{
                         n = randint(1,3);
+                        PlaySound(sound[7]);
                         for (int i = 0; i < n; i++) {
                             enemy.push_back(Enemy( {enemy[i].position.x + (randint(50,100) * posneg()),enemy[i].position.y + float(randint(50,100) * posneg())}, {0,0,32*4,32*4}, LoadTexture("resources/slime.png"), 60.f, 6,10,1.6));
                         }
-                        enemy[i].cooldown = 1200;
+                        enemy[i].cooldown = 900;
                     }
                     
-                }if (enemy[i].cooldown == -1 && (enemy[i].type == 0 || enemy[i].type == 2 || enemy[i].type == 3 || enemy[i].type == 6)){
+                }if (enemy[i].cooldown == -1 && (enemy[i].type == 0 || enemy[i].type == 2 || enemy[i].type == 3 || enemy[i].type == 6 || enemy[i].type == 7)){
                     player.health -= enemy[i].damage;
                     enemy[i].cooldown = 60;
                     enemy[i].move = 10;
                     PlaySound(sound[4]);
-                }if ((enemy[i].type == 0 || enemy[i].type == 2 || enemy[i].type == 3 || enemy[i].type == 6) && enemy[i].move > 0){
+                }if ((enemy[i].type == 0 || enemy[i].type == 2 || enemy[i].type == 3 || enemy[i].type == 6 || enemy[i].type == 7) && enemy[i].move > 0){
                     player.position += {4 * cos(GetAngleBetweenPoints(enemy[i].position,player.position)),4 * sin(GetAngleBetweenPoints(enemy[i].position,player.position))};
                 }if (enemy[i].cooldown == -1 && enemy[i].type == 4){
                     enemy[i].cooldown = 400;
                 }
 
                 if (enemy[i].health < 0){
+                    if (enemy[i].type == 7){
+                        projectile.push_back(Projectile(LoadTexture("resources/large_flame.png"),enemy[i].damage,enemy[i].position,GetAngleBetweenPoints(enemy[i].position,player.position),9,15,1));
+                    }
                     enemy.erase(enemy.begin() + i);
                     enemiesKilled++;
                     score += 200;
@@ -411,6 +420,7 @@ int main()
         
 
         if (gamemode == 2){
+            DrawTexturePro(endBack,{0,0,172,99},{0,0,1600,1000},{0,0},0.f,WHITE);
             buffer = "You Died...";
             DrawText(buffer.c_str(), screenX / 2.f - MeasureText(buffer.c_str(),80) / 2.f,screenY / 2.f - 250 ,80,RED);
             buffer = "Mosters Killed: " + std::to_string(enemiesKilled);
@@ -477,6 +487,7 @@ int main()
         }
 
         if (gamemode == 3){
+            DrawTexturePro(pauseBack,{0,0,172,99},{0,0,1600,1000},{0,0},0.f,WHITE);
             buffer = "Paused";
             DrawText(buffer.c_str(), screenX / 2.f - MeasureText(buffer.c_str(),80) / 2.f,screenY / 2.f - 250 ,80,RED);
             buffer = "Mosters Killed: " + std::to_string(enemiesKilled);
@@ -491,7 +502,7 @@ int main()
                 toggle = !toggle;
             }if (toggle){
                 
-                DrawText("Press space to continue..", screenX / 2.f - MeasureText("Press space to continue..",50) / 2.f,screenY / 2.f + 350,50,WHITE);
+                DrawText("Press space..", screenX / 2.f - MeasureText("Press space..",50) / 2.f,screenY / 2.f + 315,50,WHITE);
             }
 
             if (IsKeyDown(KEY_SPACE)){

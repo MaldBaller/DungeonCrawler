@@ -108,6 +108,8 @@ public:
     }
 
     void Generate() {
+
+        tiles.clear();
         std::srand(std::time({})); // use current time as seed for random generator
         std::vector<Vector2> occupiedPositions = {};
 
@@ -118,6 +120,8 @@ public:
 
         std::vector<Tile> previousTiles = {startingTile};
         std::vector<Tile> currentTiles = {};
+
+        
 
         //repeatedly generate tiles in adjacent positions
         bool isStillGenerating = true;

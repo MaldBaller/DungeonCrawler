@@ -58,6 +58,9 @@ public:
             else if (type == 6) {
                 buffer = "resources/slime3_" + std::to_string(i) + ".png";
             }
+            else if (type == 7) {
+                buffer = "resources/slime4_" + std::to_string(i) + ".png";
+            }
             sheet[i] = LoadTexture(buffer.c_str());
         }
     }
@@ -90,7 +93,7 @@ public:
         }
         if (FindDistance(playerPosition,position) > 450 || (type != 1 && type != 4 && type != 5)) {
             Move(moveToMake.x / 10.f, moveToMake.y / 10.f);
-            if ((type == 0 || type == 2 || type == 3|| type == 6) && FindDistance(playerPosition,position) < 90 && cooldown == 0){
+            if ((type == 0 || type == 2 || type == 3|| type == 6 || type == 7) && FindDistance(playerPosition,position) < 90 && cooldown == 0){
                 cooldown = -1;
             }
 
