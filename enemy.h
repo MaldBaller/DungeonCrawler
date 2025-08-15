@@ -2,8 +2,14 @@
 #include "character.h"
 #include <cmath>
 #include "raymath.h"
+#include "background.h"
 
 
+
+int Sign(float number) {
+    if(number>=0) {return 1;}
+    else if(number<0) {return -1;}
+}
 
 float GetAngleBetweenPoints(Vector2 a, Vector2 b) {
     float dx = b.x - a.x;
@@ -58,17 +64,25 @@ public:
         hitbox.y = position.y;
     }
 
-    void FollowPlayer(Vector2 playerPosition) {
+    void FollowPlayer(Vector2 playerPosition, std::vector<Tile> &tiles) {
         //const int stepDistance = speed;
         //speed *= 10;
         const Vector2 positionChanges[4] = {{0, speed * 10}, {0, -speed * 10}, {speed * 10, 0}, {-speed * 10, 0}};
         if (soundCooldown > 0) { soundCooldown--;}
         if (move > 0) { move--;}
 
-        Vector2 moveToMake = {0, 0};
+        bool moveIsPossible;
+        Vector2 moveToMake = {100000,100000};
         for(int i = 0; i < 4; i++) {
+            moveIsPossible = true;
+            for(int j = 0; j < tiles.size(); j++) {
+                if(CheckCollisionRecs(tiles[j].collider1, {position.x, position.y, positionChanges[i].x*10 + 32*4 * Sign(positionChanges[i].x), positionChanges[i].y*10 + 32*4 * Sign(positionChanges[i].y)}) || CheckCollisionRecs(tiles[j].collider2, {position.x, position.y, positionChanges[i].x*10 + 32*4 * Sign(positionChanges[i].x), positionChanges[i].y*10 + 32*4 * Sign(positionChanges[i].y)})) {
+                    moveIsPossible = false;
+                }
+            }
+            DrawRectangleLines(GetScreenWidth() / 2.f - 16*4 + (position.x-playerPosition.x), GetScreenHeight() / 2.f - 16*4 + (position.y-playerPosition.y), positionChanges[i].x*10 + 32*4 * Sign(positionChanges[i].x), positionChanges[i].y*10 + 32*4 * Sign(positionChanges[i].y), WHITE);
             // iterates through possible moves to find the best one
-            if(FindDistance( Vector2Add(position, positionChanges[i]) , playerPosition) < FindDistance( Vector2Add(position, moveToMake) , playerPosition)){
+            if(FindDistance( Vector2Add(position, positionChanges[i]) , playerPosition) < FindDistance( Vector2Add(position, moveToMake) , playerPosition) && moveIsPossible){
                 moveToMake = positionChanges[i];
                 playerImage = sheet[i];
                 direction = i;
