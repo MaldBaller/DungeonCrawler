@@ -15,7 +15,7 @@ public:
     bool isSlashing = false;
     int slashFrames = 15;
     int slashFrame = 0;
-    int cooldownFrames = 120;
+    int cooldownFrames = 90;
     int cooldownFrame = 0;
     Rectangle collider;
 
