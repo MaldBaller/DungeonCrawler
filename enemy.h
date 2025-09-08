@@ -6,8 +6,9 @@
 
 
 
-int Sign(float number) {
-    if(number>=0) {return 1;}
+int NotQuiteSign(float number) {
+    if(number>0) {return 2;}
+    else if(number==0) {return 1;}
     else if(number<0) {return -1;}
 }
 
