@@ -95,11 +95,11 @@ public:
         for(int i = 0; i < 4; i++) {
             moveIsPossible = true;
             for(int j = 0; j < tiles.size(); j++) {
-                if(CheckCollisionRecs(tiles[j].collider1, {position.x, position.y, positionChanges[i].x*10 + 32*4 * Sign(positionChanges[i].x), positionChanges[i].y*10 + 32*4 * Sign(positionChanges[i].y)}) || CheckCollisionRecs(tiles[j].collider2, {position.x, position.y, positionChanges[i].x*10 + 32*4 * Sign(positionChanges[i].x), positionChanges[i].y*10 + 32*4 * Sign(positionChanges[i].y)})) {
+                if(CheckCollisionRecs(tiles[j].collider1, {position.x, position.y, positionChanges[i].x*10 + 32*4 * NotQuiteSign(positionChanges[i].x), positionChanges[i].y*10 + 32*4 * NotQuiteSign(positionChanges[i].y)}) || CheckCollisionRecs(tiles[j].collider2, {position.x, position.y, positionChanges[i].x*10 + 32*4 * NotQuiteSign(positionChanges[i].x), positionChanges[i].y*10 + 32*4 * NotQuiteSign(positionChanges[i].y)})) {
                     moveIsPossible = false;
                 }
             }
-            DrawRectangleLines(GetScreenWidth() / 2.f - 16*4 + (position.x-playerPosition.x), GetScreenHeight() / 2.f - 16*4 + (position.y-playerPosition.y), positionChanges[i].x*10 + 32*4 * Sign(positionChanges[i].x), positionChanges[i].y*10 + 32*4 * Sign(positionChanges[i].y), WHITE);
+            DrawRectangleLines(GetScreenWidth() / 2.f - 16*4 + (position.x-playerPosition.x), GetScreenHeight() / 2.f - 16*4 + (position.y-playerPosition.y), positionChanges[i].x*10 + 32*4 * NotQuiteSign(positionChanges[i].x), positionChanges[i].y*10 + 32*4 * NotQuiteSign(positionChanges[i].y), WHITE);
             // iterates through possible moves to find the best one
             if(FindDistance( Vector2Add(position, positionChanges[i]) , playerPosition) < FindDistance( Vector2Add(position, moveToMake) , playerPosition) && moveIsPossible){
                 moveToMake = positionChanges[i];
